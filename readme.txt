@@ -15,7 +15,7 @@ VideoSpot App Publisher is a WordPress plugin to publish your posts and pages as
 
 As soon as you have configured the plugin, you will have a new button below the classic *Publish* one on each page and post edition page in your dashboard.
 
-Don't hesitate to ask us new features or report bugs on [the plugin page]() !
+Don't hesitate to ask us new features or report bugs on [the plugin page](https://wordpress.org/support/plugin/videospot-app-publisher/) !
 
 == Installation ==
 
