@@ -1,4 +1,4 @@
-# wordpress-app-publisher
+# VideoSpot App Publisher WordPress plugin
 
 VideoSpot App Publisher is a WordPress plugin to publish your posts and pages as VideoSpot Apps. VideoSpot is a digital signage plate-form. You can create a free account at <http://join.videospot.com>.
 
