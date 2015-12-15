@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:element name="vsapp">
+		<xs:complexType>
+			<xs:sequence>
+
+
+				<!--
+
+				DESCRIPTION
+
+				-->
+				<xs:element name="description" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="en" minOccurs="0" maxOccurs="1" type="FreeXML" />
+							<xs:element name="fr" minOccurs="0" maxOccurs="1" type="FreeXML" />
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+
+
+
+				<!--
+
+				VERSIONS
+
+				-->
+				<xs:element name="versions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="version">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="en" minOccurs="0" maxOccurs="1" type="FreeXML" />
+										<xs:element name="fr" minOccurs="0" maxOccurs="1" type="FreeXML" />
+									</xs:all>
+									<xs:attribute use="required" name="name" type="TString" />
+									<xs:attribute use="optional" name="notice-en" type="TString" />
+									<xs:attribute use="optional" name="notice-fr" type="TString" />
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+					<xs:unique name="UniqueNestedVersionName">
+						<xs:selector xpath="*" />
+				    <xs:field xpath="@name"/>
+					</xs:unique>
+				</xs:element>
+
+
+
+				<!--
+
+				COMPATIBILITY
+
+				-->
+				<xs:element name="compatibility" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="min-vsos-version" use="optional" type="TVSOSVersion" />
+						<xs:attribute name="orientation" use="optional" default="indifferent" type="TOrientationOrIndifferent" />
+						<xs:attribute name="keyboard" use="optional" default="indifferent" type="TRequiredForbiddenOrIndifferent" />
+						<xs:attribute name="mouse" use="optional" default="indifferent" type="TRequiredForbiddenOrIndifferent" />
+						<xs:attribute name="touch" use="optional" default="indifferent" type="TRequiredForbiddenOrIndifferent" />
+						<xs:attribute name="sound" use="optional" default="indifferent" type="TRequiredForbiddenOrIndifferent" />
+					</xs:complexType>
+				</xs:element>
+
+
+
+
+				<!--
+
+				CONFIGURATION
+
+				-->
+				<xs:element name="configuration" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:attribute name="volume" use="optional" type="TPercent" />
+						<xs:attribute name="duration" use="optional" default="" type="TTimeSpanOrNull" />
+						<xs:attribute name="address-bar" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="status-bar" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="tabs" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="back-forward-buttons" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="reload-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="stop-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="home-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="print-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="text-size-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="reset-button" use="optional" default="disabled" type="TEnabledOrDisabled" />
+						<xs:attribute name="mouse" use="optional" default="hidden" type="TEnabledDisabledOrHidden" />
+						<xs:attribute name="screensaver-timeout" use="optional" default="" type="TTimeSpanOrNull" />
+						<xs:attribute name="reset-timeout" use="optional" default="" type="TTimeSpanOrNull" />
+						<xs:attribute name="reset-warning-timeout" use="optional" default="" type="TTimeSpanOrNull" />
+						<xs:attribute name="background" use="optional" default="#000000" type="TColor" />
+					</xs:complexType>
+				</xs:element>
+
+
+
+
+				<!--
+
+				FIELDS
+
+				-->
+				<xs:element name="custom-fields" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="string" type="StringField" />
+							<xs:element name="integer" type="IntegerField" />
+							<xs:element name="integer-or-null" type="IntegerOrNullField" />
+							<xs:element name="decimal" type="DecimalField" />
+							<xs:element name="decimal-or-null" type="DecimalOrNullField" />
+							<xs:element name="boolean" type="BooleanField" />
+							<xs:element name="boolean-or-null" type="BooleanOrNullField"/>
+							<xs:element name="datetime" type="DateTimeField" />
+							<xs:element name="datetime-or-null" type="DateTimeOrNullField" />
+							<xs:element name="date" type="DateField" />
+							<xs:element name="date-or-null" type="DateOrNullField" />
+							<xs:element name="time" type="TimeField" />
+							<xs:element name="time-or-null" type="TimeOrNullField" />
+							<xs:element name="timespan" type="TimeSpanField" />
+							<xs:element name="timespan-or-null" type="TimeSpanOrNullField" />
+							<xs:element name="color" type="ColorField" />
+							<xs:element name="color-or-null" type="ColorOrNullField" />
+							<xs:element name="clip-or-null" type="ClipOrNullField" />
+
+							<xs:element name="group">
+								<xs:complexType>
+									<xs:choice minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="string" type="StringField" />
+										<xs:element name="integer" type="IntegerField" />
+										<xs:element name="integer-or-null" type="IntegerOrNullField" />
+										<xs:element name="decimal" type="DecimalField" />
+										<xs:element name="decimal-or-null" type="DecimalOrNullField" />
+										<xs:element name="boolean" type="BooleanField" />
+										<xs:element name="boolean-or-null" type="BooleanOrNullField"/>
+										<xs:element name="datetime" type="DateTimeField" />
+										<xs:element name="datetime-or-null" type="DateTimeOrNullField" />
+										<xs:element name="date" type="DateField" />
+										<xs:element name="date-or-null" type="DateOrNullField" />
+										<xs:element name="time" type="TimeField" />
+										<xs:element name="time-or-null" type="TimeOrNullField" />
+										<xs:element name="timespan" type="TimeSpanField" />
+										<xs:element name="timespan-or-null" type="TimeSpanOrNullField" />
+										<xs:element name="color" type="ColorField" />
+										<xs:element name="color-or-null" type="ColorOrNullField" />
+										<xs:element name="clip-or-null" type="ClipOrNullField" />
+									</xs:choice>
+									<xs:attribute name="name" type="TIdentifier" use="required" />
+									<xs:attribute name="en" type="xs:string" use="optional" />
+									<xs:attribute name="fr" type="xs:string" use="optional" />
+									<xs:attribute name="desc-en" type="xs:string" use="optional" />
+									<xs:attribute name="desc-fr" type="xs:string" use="optional" />
+									<xs:attribute name="min-count" type="TInteger" default="1" use="optional" />
+									<xs:attribute name="max-count" type="TIntegerOrNull" default="1" use="optional" />
+								</xs:complexType>
+								<xs:unique name="UniqueNestedFieldName">
+									<xs:selector xpath="*" />
+							    <xs:field xpath="@name"/>
+								</xs:unique>
+							</xs:element>
+
+						</xs:choice>
+					</xs:complexType>
+					<xs:unique name="UniqueFieldName">
+						<xs:selector xpath="*" />
+				    <xs:field xpath="@name"/>
+					</xs:unique>
+				</xs:element>
+
+			</xs:sequence>
+			<xs:attribute name="name" use="optional" default="" type="xs:string" />
+			<xs:attribute name="version" use="optional" default="" type="xs:string" />
+			<xs:attribute name="author" use="optional" default="" type="xs:string" />
+			<xs:attribute name="url" use="optional" default="" type="xs:string" />
+			<xs:attribute name="preview" use="optional" default="true" type="TBoolean" />
+		</xs:complexType>
+	</xs:element>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--
+
+	TYPED FIELDS
+
+	-->
+	<!-- STRING -->
+	<xs:complexType name="StringField">
+		<xs:choice  >
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="textbox" type="TextBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TString" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TString" default="" />
+		<xs:attribute name="match" use="optional" type="xs:string" />
+		<xs:attribute name="min-length" use="optional" type="xs:nonNegativeInteger" />
+		<xs:attribute name="max-length" use="optional" type="xs:nonNegativeInteger" />
+	</xs:complexType>
+
+	<!-- INTEGER -->
+	<xs:complexType name="IntegerField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="textbox" type="TextBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TInteger" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TInteger" default="0" />
+		<xs:attribute name="min" use="optional" type="TInteger" />
+		<xs:attribute name="max" use="optional" type="TInteger" />
+	</xs:complexType>
+
+	<!-- INTEGER-OR-NULL -->
+	<xs:complexType name="IntegerOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="textbox" type="TextBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TIntegerOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TIntegerOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TInteger" />
+		<xs:attribute name="max" use="optional" type="TInteger" />
+	</xs:complexType>
+
+	<!-- DECIMAL -->
+	<xs:complexType name="DecimalField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="textbox" type="TextBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDecimal" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDecimal" default="0.0" />
+		<xs:attribute name="min" use="optional" type="TDecimal" />
+		<xs:attribute name="max" use="optional" type="TDecimal" />
+	</xs:complexType>
+
+	<!-- DECIMAL-OR-NULL -->
+	<xs:complexType name="DecimalOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="textbox" type="TextBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDecimalOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDecimalOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TDecimal" />
+		<xs:attribute name="max" use="optional" type="TDecimal" />
+	</xs:complexType>
+
+	<!-- BOOLEAN -->
+	<xs:complexType name="BooleanField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="checkbox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TBoolean" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TBoolean" default="false" />
+	</xs:complexType>
+
+	<!-- BOOLEAN-OR-NULL -->
+	<xs:complexType name="BooleanOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TBooleanOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TBooleanOrNull" default="" />
+	</xs:complexType>
+
+	<!-- DATETIME -->
+	<xs:complexType name="DateTimeField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="datetimebox">
+				<xs:complexType>
+					<xs:attribute name="seconds" type="xs:boolean" default="false" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDateTime" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDateTime" /><!-- default="now" -->
+		<xs:attribute name="min" use="optional" type="TDateTimeOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TDateTimeOrNull" default="" />
+	</xs:complexType>
+
+	<!-- DATETIME-OR-NULL -->
+	<xs:complexType name="DateTimeOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="datetimebox">
+				<xs:complexType>
+					<xs:attribute name="seconds" type="xs:boolean" default="false" use="optional" />
+					<xs:attribute name="null-en" type="xs:string" use="optional" />
+					<xs:attribute name="null-fr" type="xs:string" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDateTimeOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDateTimeOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TDateTimeOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TDateTimeOrNull" default="" />
+	</xs:complexType>
+
+	<!-- DATE -->
+	<xs:complexType name="DateField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="datebox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDate" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDate" /><!-- default="today" -->
+		<xs:attribute name="min" use="optional" type="TDateOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TDateOrNull" default="" />
+	</xs:complexType>
+
+	<!-- DATE-OR-NULL -->
+	<xs:complexType name="DateOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="datebox">
+				<xs:complexType>
+					<xs:attribute name="null-en" type="xs:string" use="optional" />
+					<xs:attribute name="null-fr" type="xs:string" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TDateOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TDateOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TDateOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TDateOrNull" default="" />
+	</xs:complexType>
+
+	<!-- TIME -->
+	<xs:complexType name="TimeField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="timebox">
+				<xs:complexType>
+					<xs:attribute name="seconds" type="xs:boolean" default="false" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TTime" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TTime" default="00:00:00" />
+		<xs:attribute name="min" use="optional" type="TTimeOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TTimeOrNull" default="" />
+	</xs:complexType>
+
+	<!-- TIME-OR-NULL -->
+	<xs:complexType name="TimeOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="timebox">
+				<xs:complexType>
+					<xs:attribute name="seconds" type="xs:boolean" default="false" use="optional" />
+					<xs:attribute name="null-en" type="xs:string" use="optional" />
+					<xs:attribute name="null-fr" type="xs:string" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TTimeOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TTimeOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TTimeOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TTimeOrNull" default="" />
+	</xs:complexType>
+
+	<!-- TIMESPAN -->
+	<xs:complexType name="TimeSpanField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="timespanbox">
+				<xs:complexType>
+					<xs:attribute name="days" type="xs:boolean" default="false" />
+					<xs:attribute name="hours" type="xs:boolean" default="true" />
+					<xs:attribute name="minutes" type="xs:boolean" default="true" />
+					<xs:attribute name="seconds" type="xs:boolean" default="true" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TTimeSpan" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TTimeSpan" default="PT0S" />
+		<xs:attribute name="min" use="optional" type="TTimeSpanOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TTimeSpanOrNull" default="" />
+	</xs:complexType>
+
+	<!-- TIMESPAN-OR-NULL -->
+	<xs:complexType name="TimeSpanOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="timespanbox">
+				<xs:complexType>
+					<xs:attribute name="days" type="xs:boolean" default="false" />
+					<xs:attribute name="hours" type="xs:boolean" default="true" />
+					<xs:attribute name="minutes" type="xs:boolean" default="true" />
+					<xs:attribute name="seconds" type="xs:boolean" default="true" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TTimeSpanOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TTimeSpanOrNull" default="" />
+		<xs:attribute name="min" use="optional" type="TTimeSpanOrNull" default="" />
+		<xs:attribute name="max" use="optional" type="TTimeSpanOrNull" default="" />
+	</xs:complexType>
+
+	<!-- COLOR -->
+	<xs:complexType name="ColorField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="colorbox" />
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TColor" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TColor" default="#ffffff" />
+	</xs:complexType>
+
+	<!-- COLOR-OR-NULL -->
+	<xs:complexType name="ColorOrNullField">
+		<xs:choice>
+			<xs:element name="custombox" type="CustomBox" />
+			<xs:element name="colorbox">
+				<xs:complexType>
+					<xs:attribute name="null-en" type="xs:string" use="optional" />
+					<xs:attribute name="null-fr" type="xs:string" use="optional" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="selectbox">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="option" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="value" type="TColorOrNull" use="required" />
+								<xs:attributeGroup ref="SelectBoxOptionAttributes" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="SelectBoxdAttributes" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="default" use="optional" type="TColorOrNull" default="" />
+	</xs:complexType>
+
+	<!-- CLIP-OR-NULL -->
+	<xs:complexType name="ClipOrNullField">
+		<xs:choice>
+			<xs:element name="clipbox">
+				<xs:complexType>
+					<xs:attribute name="width" type="xs:nonNegativeInteger" default="300" use="optional" />
+					<xs:attribute name="rows" type="xs:positiveInteger" default="1" use="optional" />
+					<xs:attribute name="null-en" type="xs:string" use="optional" />
+					<xs:attribute name="null-fr" type="xs:string" use="optional" />
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="FieldAttributes" />
+		<xs:attribute name="type" type="TString" use="optional" />
+		<xs:attribute name="search" type="TString" use="optional" />
+		<xs:attribute name="compatibility" type="TString" use="optional" />
+	</xs:complexType>
+
+
+
+
+
+	<!--
+
+	ATTRIBUTE GROUPS
+
+	-->
+	<xs:attributeGroup name="FieldAttributes">
+		<xs:attribute name="name" type="TIdentifier" use="required" />
+		<xs:attribute name="en" type="xs:string" use="optional" />
+		<xs:attribute name="fr" type="xs:string" use="optional" />
+		<xs:attribute name="desc-en" type="xs:string" use="optional" />
+		<xs:attribute name="desc-fr" type="xs:string" use="optional" />
+	</xs:attributeGroup>
+
+	<xs:attributeGroup name="SelectBoxdAttributes">
+		<xs:attribute name="rows" type="xs:positiveInteger" default="1" use="optional" />
+		<xs:attribute name="width" type="xs:nonNegativeInteger" default="300" use="optional" />
+	</xs:attributeGroup>
+
+	<xs:attributeGroup name="SelectBoxOptionAttributes">
+		<xs:attribute name="en" type="xs:string" use="optional" />
+		<xs:attribute name="fr" type="xs:string" use="optional" />
+	</xs:attributeGroup>
+
+
+
+
+	<!--
+
+	SELECT BOX TYPES
+
+	-->
+	<xs:complexType name="CustomBox">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="css" type="CustomBoxInner" />
+			<xs:element name="html" type="CustomBoxInner" />
+			<xs:element name="js" type="CustomBoxInner" />
+		</xs:choice>
+		<xs:attribute name="name" type="TString" default="$$$" use="optional" />
+		<xs:attribute name="namespace" type="TString" default="@@@" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType mixed="true" name="CustomBoxInner">
+		<xs:sequence>
+			<xs:any minOccurs="0" processContents="skip" />
+		</xs:sequence>
+		<xs:attribute name="mode" type="TViewEditOrAny" default="any" use="optional" />
+	</xs:complexType>
+
+
+	<xs:complexType name="TextBox">
+		<xs:attribute name="rows" type="xs:positiveInteger" default="1" use="optional" />
+		<xs:attribute name="width" type="xs:nonNegativeInteger" default="300" use="optional" />
+	</xs:complexType>
+
+
+	<xs:complexType mixed="true" name="FreeXML">
+		<xs:sequence>
+			<xs:any minOccurs="0" processContents="skip" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+
+	<!--
+
+	CORE TYPES
+
+	-->
+	<xs:simpleType name="TNull"><xs:restriction base="xs:string"><xs:enumeration value="" /></xs:restriction></xs:simpleType>
+	<xs:simpleType name="TString"><xs:union memberTypes="xs:string" /></xs:simpleType>
+	<xs:simpleType name="TInteger"><xs:union memberTypes="xs:integer" /></xs:simpleType>
+	<xs:simpleType name="TIntegerOrNull"><xs:union memberTypes="TInteger TNull" /></xs:simpleType>
+	<xs:simpleType name="TDecimal"><xs:union memberTypes="xs:decimal" /></xs:simpleType>
+	<xs:simpleType name="TDecimalOrNull"><xs:union memberTypes="TDecimal TNull" /></xs:simpleType>
+	<xs:simpleType name="TBoolean"><xs:union memberTypes="xs:boolean" /></xs:simpleType>
+	<xs:simpleType name="TBooleanOrNull"><xs:union memberTypes="TBoolean TNull" /></xs:simpleType>
+	<xs:simpleType name="TDateTime"><xs:union memberTypes="xs:dateTime" /></xs:simpleType>
+	<xs:simpleType name="TDateTimeOrNull"><xs:union memberTypes="TDateTime TNull" /></xs:simpleType>
+	<xs:simpleType name="TDate"><xs:union memberTypes="xs:date" /></xs:simpleType>
+	<xs:simpleType name="TDateOrNull"><xs:union memberTypes="TDate TNull" /></xs:simpleType>
+	<xs:simpleType name="TTime"><xs:union memberTypes="xs:time" /></xs:simpleType>
+	<xs:simpleType name="TTimeOrNull"><xs:union memberTypes="TTime TNull" /></xs:simpleType>
+	<xs:simpleType name="TTimeSpan"><xs:union memberTypes="xs:duration" /></xs:simpleType>
+	<xs:simpleType name="TTimeSpanOrNull"><xs:union memberTypes="TTimeSpan TNull" /></xs:simpleType>
+	<xs:simpleType name="TColor"><xs:restriction base="xs:string"><xs:pattern value="#[0-9a-fA-F]{6}"/></xs:restriction></xs:simpleType>
+	<xs:simpleType name="TColorOrNull"><xs:union memberTypes="TColor TNull" /></xs:simpleType>
+
+
+	<!--
+
+	UTILITY TYPES
+
+	-->
+	<xs:simpleType name="TVSOSVersion">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]+(\.[0-9]+(\.[0-9]+)?)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z_][0-9a-zA-Z_]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TJavascriptIdentifier">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[$a-zA-Z_][$0-9a-zA-Z_]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TClipTypeGroup">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="APP"/>
+			<xs:enumeration value="MOV"/>
+			<xs:enumeration value="IMG"/>
+			<xs:enumeration value="MUS"/>
+			<xs:enumeration value="URL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TRequiredForbiddenOrIndifferent">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="indifferent"/>
+			<xs:enumeration value="required"/>
+			<xs:enumeration value="forbidden"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TEnabledOrDisabled">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="enabled"/>
+			<xs:enumeration value="disabled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TEnabledDisabledOrHidden">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="enabled"/>
+			<xs:enumeration value="disabled"/>
+			<xs:enumeration value="hidden"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TAllowed">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="allowed" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TForbidden">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="forbidden" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TAllowedForbidden">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="allowed" />
+			<xs:enumeration value="forbidden" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TOrientationOrIndifferent">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="indifferent"/>
+			<xs:enumeration value="horizontal" />
+			<xs:enumeration value="vertical" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TPercent">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="100" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TViewEditOrAny">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="any"/>
+			<xs:enumeration value="view" />
+			<xs:enumeration value="edit" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

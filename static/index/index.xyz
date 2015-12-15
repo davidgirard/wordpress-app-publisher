@@ -1,0 +1,44 @@
+<?php
+/*
+|--------------------------------------------------------------------------
+| Application Start
+|--------------------------------------------------------------------------
+|
+| This script will load a lot of thing and especially the user defined custom
+| parameters as the autoscroll one for example which will be available as a
+| PHP variable named the same way as in the vsapp.xml file (here: $autoscroll)
+|
+*/
+include_once 'global.inc.php';
+
+
+/*
+|--------------------------------------------------------------------------
+| Prepare JS injections
+|--------------------------------------------------------------------------
+|
+*/
+// This one is mandatory to make the app loop according to the videospot clip duration
+$js = <<<EOF
+<script type="text/javascript">//<![CDATA[
+	setTimeout( function() {
+		<?php echo (VSOS::IsInMatrix()&&($is_played_on_videospot)) ? '' : 'document.location.href="index.php";'; ?>
+	} , <?php echo $content_duration * 1000; ?> );
+//]]></script>
+EOF;
+
+// This one is to make the page scroll automatically
+$js .= ( $autoscroll !== true ) ? '' : <<<EOF
+<script type="text/javascript">//<![CDATA[
+	Put your autoscroll code here
+//]]></script>
+EOF;
+
+
+/*
+|--------------------------------------------------------------------------
+| The WP Page now
+|--------------------------------------------------------------------------
+|
+*/
+?>

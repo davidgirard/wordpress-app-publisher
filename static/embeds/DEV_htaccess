@@ -1,0 +1,15 @@
+php_flag display_errors on
+
+php_value xdebug.remote_enable 1
+php_value xdebug.remote_connect_back 1
+php_value xdebug.remote_host 192.168.10.27
+php_value xdebug.remote_port 9000
+php_value xdebug.remote_handler dbgp
+php_value xdebug.show_local_vars 1
+php_value xdebug.profiler_enable 1
+php_value xdebug.profiler_enable_trigger 1
+php_value xdebug.profiler_output_dir /tmp/xdebug
+php_value xdebug.profiler_output_name xdebug.%u.out
+
+php_value xdebug.max_nesting_level 100
+php_value xdebug.var_display_max_depth 10

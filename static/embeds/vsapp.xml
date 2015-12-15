@@ -1,0 +1,2630 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<vsapp name="Loop" author="TCPartners" version="1.1" auto-deploy-attachments="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vsapp.xsd" preview="true">
+
+	<description>
+		<en><![CDATA[
+			This app plays a list of clips according to parameters !
+			]]></en>
+		<fr><![CDATA[
+			Cette app joue une liste de clips en boucle en fonction de certains paramètres.
+			]]></fr>
+		</description>
+
+		<versions>
+			<version name="0.1">
+				<en>Initial production release</en>
+				<fr>Première version en production</fr>
+			</version>
+			<version name="0.2">
+				<en>Fix bug where loops of loops are not well played on preview server</en>
+				<fr>Correction d'un problème où les loops de loops ne s'enchainent pas correctement en preview</fr>
+			</version>
+			<version name="0.3">
+				<en><ul><li>Clip validity dates support</li><li>New day of week filter</li></ul></en>
+				<fr><ul><li>Support des dates de validité des clips</li><li>Nouveau filtre sur le jour de la semaine</li></ul></fr>
+			</version>
+			<version name="0.4">
+				<en><ul><li>New tags filter</li><li>New dates filter</li></ul></en>
+				<fr><ul><li>Nouveau filtre sur les étiquettes</li><li>Nouveau filtre sur des dates</li></ul></fr>
+			</version>
+			<version name="0.5">
+				<en>Bug fix with tags on clip 10</en>
+				<fr>Correction d'un bug sur les tags pour le clip 10</fr>
+			</version>
+			<version name="0.6">
+				<en>
+					<ul>
+						<li>Support playlist tickers offsets. Support only numeric values for X and Y in playlist offsets. SH-100 or SW+100 is not yet supported</li>
+						<li>Add time ranges filters</li>
+						<li>Fix inclusive dates bug</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Support des calques de playlists. Seulement les valeurs numériques pour X et Y sont supportées. Vous ne pouvez utiliser SH-100 ou SW+100 par exemple.</li>
+						<li>Ajout des filtres sur le temps</li>
+						<li>Correction des dates non inclues alors qu'elles doivent l'être</li>
+					</ul>
+				</fr>
+			</version>
+			<version name="0.7">
+				<en>
+					<ul>
+						<li>You can now play 40 clips</li>
+						<li>Play count parameter added</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Vous pouvez maintenant jouer jusqu'à 40 clips</li>
+						<li>Ajout du paramètre Nombre de clips à jouer</li>
+					</ul>
+				</fr>
+			</version>
+			<version name="0.8">
+				<en>
+					<ul>
+						<li>Add an option to force reload when played in an other app</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Ajout du paramètre du forcage de boucle quand l'app est jouée dans une autre app</li>
+					</ul>
+				</fr>
+			</version>
+			<version name="0.9">
+				<en>
+					<ul>
+						<li>Add list of clips in preview</li>
+						<li>Add colors for validity dates</li>
+						<li>Support memory list (in random playback, a content will not be played 2 times in a single run)</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Ajout de la liste des contenus en prévisualisation</li>
+						<li>Ajout de la coloration des dates de validité</li>
+						<li>Support de la mémoire de liste (lors d'un jeu en aléatoire, un même contenu ne sera pas joué 2 fois)</li>
+					</ul>
+				</fr>
+			</version>
+			<version name="1.0">
+				<en>
+					<ul>
+						<li>Add public halt method on playlist and clip object for developers</li>
+						<li>All clips are no more downloaded, only played clips will be</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Ajout de méthodes publiq sur les objets playlist et clip pour les développeurs</li>
+						<li>Tous les clips ne sont maintenant plus téléchargés mais uniquement ceux qui seront joués</li>
+					</ul>
+				</fr>
+			</version>
+			<version name="1.1">
+				<en>
+					<ul>
+						<li>Add a logo (with transparency) on top of the loop on players since version 3.5.15</li>
+						<li>Improve children clip stop management on players since version 3.5.15</li>
+					</ul>
+				</en>
+				<fr>
+					<ul>
+						<li>Ajout d'un logo en surimpression avec gestion de la transparence sur les lecteurs à partir de la version 3.5.15</li>
+						<li>Amélioration de la gestion de la fin des clips enfants sur les lecteurs à partir de la version 3.5.15</li>
+					</ul>
+				</fr>
+			</version>
+		</versions>
+
+		<compatibility
+			orientation="indifferent"
+			mouse="indifferent"
+			keyboard="indifferent"
+			touch="indifferent"
+			sound="indifferent"
+			min-vsos-version="3.5.5"
+		/>
+
+		<configuration
+			duration=""
+			tabs="disabled"
+			address-bar="disabled"
+			status-bar="disabled"
+			home-button="disabled"
+			back-forward-buttons="disabled"
+			stop-button="disabled"
+			reload-button="disabled"
+			reset-button="disabled"
+			text-size-button="disabled"
+			print-button="disabled"
+			mouse="hidden"
+			reset-timeout=""
+			reset-warning-timeout=""
+			screensaver-timeout=""
+			background="#000000"
+		/>
+
+		<custom-fields>
+
+			<group name="clip1" en="Clip 1" fr="Clip 1">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+
+			</group>
+
+			<group name="clip2" en="Clip 2" fr="Clip 2">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+
+			</group>
+
+			<group name="clip3" en="Clip 3" fr="Clip 3">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux/brumeux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip4" en="Clip 4" fr="Clip 4">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip5" en="Clip 5" fr="Clip 5">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip6" en="Clip 6" fr="Clip 6">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip7" en="Clip 7" fr="Clip 7">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip8" en="Clip 8" fr="Clip 8">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip9" en="Clip 9" fr="Clip 9">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip10" en="Clip 10" fr="Clip 10">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+
+			<group name="clip11" en="Clip 11" fr="Clip 11">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip12" en="Clip 12" fr="Clip 12">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip13" en="Clip 13" fr="Clip 13">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux/brumeux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip14" en="Clip 14" fr="Clip 14">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip15" en="Clip 15" fr="Clip 15">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip16" en="Clip 16" fr="Clip 16">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip17" en="Clip 17" fr="Clip 17">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip18" en="Clip 18" fr="Clip 18">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip19" en="Clip 19" fr="Clip 19">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip20" en="Clip 20" fr="Clip 20">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+
+			</group>
+
+
+			<group name="clip21" en="Clip 21" fr="Clip 21">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+
+			</group>
+
+			<group name="clip22" en="Clip 22" fr="Clip 22">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+
+			</group>
+
+			<group name="clip23" en="Clip 23" fr="Clip 23">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux/brumeux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip24" en="Clip 24" fr="Clip 24">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip25" en="Clip 25" fr="Clip 25">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip26" en="Clip 26" fr="Clip 26">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip27" en="Clip 27" fr="Clip 27">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip28" en="Clip 28" fr="Clip 28">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip29" en="Clip 29" fr="Clip 29">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip30" en="Clip 30" fr="Clip 30">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+
+			<group name="clip31" en="Clip 31" fr="Clip 31">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip32" en="Clip 32" fr="Clip 32">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip33" en="Clip 33" fr="Clip 33">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux/brumeux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip34" en="Clip 34" fr="Clip 34">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip35" en="Clip 35" fr="Clip 35">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip36" en="Clip 36" fr="Clip 36">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip37" en="Clip 37" fr="Clip 37">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip38" en="Clip 38" fr="Clip 38">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip39" en="Clip 39" fr="Clip 39">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="clip40" en="Clip 40" fr="Clip 40">
+
+				<clip-or-null name="clip" en="Clip" fr="Clip">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="play" default="1" en="Play" fr="Jouer">
+					<selectbox>
+						<option value="1" en="Always" fr="Tout le temps"/>
+						<option value="2" en="1 time every 2 cycles" fr="Une fois sur deux"/>
+						<option value="3" en="1 time every 3 cycles" fr="Une fois sur trois"/>
+						<option value="4" en="1 time every 4 cycles" fr="Une fois sur quatre"/>
+						<option value="5" en="1 time every 5 cycles" fr="Une fois sur cinq"/>
+						<option value="S" en="Only on Monday" fr="Seulement le lundi"/>
+						<option value="T" en="Only on Tuesday" fr="Seulement le mardi"/>
+						<option value="U" en="Only on Wednesday" fr="Seulement le mercredi"/>
+						<option value="V" en="Only on Thursday" fr="Seulement le jeudi"/>
+						<option value="W" en="Only on Friday" fr="Seulement le vendredi"/>
+						<option value="Y" en="Only on Saturday" fr="Seulement le samedi"/>
+						<option value="Z" en="Only on Sunday" fr="Seulement le dimanche"/>
+						<option value="A" en="Only if weather is sunny" fr="Seulement s'il fait beau"/>
+						<option value="L" en="Only if weather is cloudy/misty" fr="Seulement si le temps est nuageux"/>
+						<option value="B" en="Only if weather is rainy" fr="Seulement s'il pleut"/>
+						<option value="I" en="Only if weather is snowy" fr="Seulement s'il neige"/>
+						<option value="J" en="Only if weather is haily" fr="Seulement s'il grêle"/>
+						<option value="K" en="Only if weather is stormy" fr="Seulement si le temps est orageux"/>
+						<option value="C" en="Only if temperature&gt;0°C" fr="Seulement s'il fait plus de 0°C"/>
+						<option value="E" en="Only if temperature&gt;3°C" fr="Seulement s'il fait plus de 3°C"/>
+						<option value="G" en="Only if temperature&gt;20°C" fr="Seulement s'il fait plus de 20°C"/>
+						<option value="D" en="Only if temperature&lt;0°C" fr="Seulement s'il fait moins de 0°C"/>
+						<option value="F" en="Only if temperature&lt;3°C" fr="Seulement s'il fait moins de 3°C"/>
+						<option value="H" en="Only if temperature&lt;20°C" fr="Seulement s'il fait moins de 20°C"/>
+					</selectbox>
+				</string>
+
+				<date-or-null name="datefrom" fr="Jouer à partir du" en="Play only from" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<date-or-null name="dateto" fr="Jouer jusqu'au" en="Play only until" desc-fr="Les dates de validité du contenu seront toujours respectées. Cette date est inclue." desc-en="Clip validaity dates will be taken into account. This date is included.">
+    			  	<datebox></datebox>
+      			</date-or-null>
+
+				<time-or-null name="timefrom" fr="Jouer à partir de" en="Play only from" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<time-or-null name="timeto" fr="Jouer jusqu'à" en="Play only until" desc-fr="Utilisez ce temps pour ne jouer qu'à certaines tranches horaires de la journée" desc-en="Use this time parameter to play this clip only at some day ranges">
+    			  	<timebox></timebox>
+      			</time-or-null>
+
+				<tag-array name="tags" fr="Jouer sur les terminaux avec ces étiquettes" en="Play on terminals with these tags" desc-fr="Laisser vide pour jouer sur tous les terminaux. Il suffit d'une seule étiquette sur le terminal (OR) pour que le contenu soit pris en compte." desc-en="Left empty to play on all terminals. Only one tag is needed to match a terminal (OR).">
+					<tagsbox></tagsbox>
+				</tag-array>
+			</group>
+
+			<group name="default" en="Default parameters" fr="Paramètres par défaut">
+
+				<boolean name="random" default="false" en="Shuffle" fr="Jouer aléatoirement">
+					<checkbox></checkbox>
+				</boolean>
+
+				<string name="count" default="0" en="Play" fr="Jouer" desc-en="Loop will only play X clips before quitting or restarting. It enables clips memory in a way that at next run, loop will play next clips" desc-fr="Loop ne jouera que X clips avant de quitter ou de boucler. La mémoire des clips est utilisée de telle sorte qu'au tour suivant, ce ne seront pas les mêmes clips qui seront joués.">
+					<selectbox>
+						<option value="0" en="All clips" fr="Tous les clips"/>
+						<option value="1" en="only 1 clip" fr="seulement 1 clip"/>
+						<option value="2" en="only 2 clips" fr="seulement 2 clips"/>
+						<option value="3" en="only 3 clips" fr="seulement 3 clips"/>
+						<option value="4" en="only 4 clips" fr="seulement 4 clips"/>
+						<option value="5" en="only 5 clips" fr="seulement 5 clips"/>
+						<option value="6" en="only 6 clips" fr="seulement 6 clips"/>
+						<option value="7" en="only 7 clips" fr="seulement 7 clips"/>
+						<option value="8" en="only 8 clips" fr="seulement 8 clips"/>
+						<option value="9" en="only 9 clips" fr="seulement 9 clips"/>
+						<option value="10" en="only 10 clips" fr="seulement 10 clips"/>
+						<option value="11" en="only 11 clips" fr="seulement 11 clips"/>
+						<option value="12" en="only 12 clips" fr="seulement 12 clips"/>
+						<option value="13" en="only 13 clips" fr="seulement 13 clips"/>
+						<option value="14" en="only 14 clips" fr="seulement 14 clips"/>
+						<option value="15" en="only 15 clips" fr="seulement 15 clips"/>
+						<option value="16" en="only 16 clips" fr="seulement 16 clips"/>
+						<option value="17" en="only 17 clips" fr="seulement 17 clips"/>
+						<option value="18" en="only 18 clips" fr="seulement 18 clips"/>
+						<option value="19" en="only 19 clips" fr="seulement 19 clips"/>
+						<option value="20" en="only 20 clips" fr="seulement 20 clips"/>
+						<option value="21" en="only 21 clips" fr="seulement 21 clips"/>
+						<option value="22" en="only 22 clips" fr="seulement 22 clips"/>
+						<option value="23" en="only 23 clips" fr="seulement 23 clips"/>
+						<option value="24" en="only 24 clips" fr="seulement 24 clips"/>
+						<option value="25" en="only 25 clips" fr="seulement 25 clips"/>
+						<option value="26" en="only 26 clips" fr="seulement 26 clips"/>
+						<option value="27" en="only 27 clips" fr="seulement 27 clips"/>
+						<option value="28" en="only 28 clips" fr="seulement 28 clips"/>
+						<option value="29" en="only 29 clips" fr="seulement 29 clips"/>
+						<option value="30" en="only 30 clips" fr="seulement 30 clips"/>
+						<option value="31" en="only 31 clips" fr="seulement 31 clips"/>
+						<option value="32" en="only 32 clips" fr="seulement 32 clips"/>
+						<option value="33" en="only 33 clips" fr="seulement 33 clips"/>
+						<option value="34" en="only 34 clips" fr="seulement 34 clips"/>
+						<option value="35" en="only 35 clips" fr="seulement 35 clips"/>
+						<option value="36" en="only 36 clips" fr="seulement 36 clips"/>
+						<option value="37" en="only 37 clips" fr="seulement 37 clips"/>
+						<option value="38" en="only 38 clips" fr="seulement 38 clips"/>
+						<option value="39" en="only 39 clips" fr="seulement 39 clips"/>
+					</selectbox>
+				</string>
+
+				<boolean name="fadeapp" default="false" en="Fade Apps" fr="Fondu des Apps">
+					<checkbox></checkbox>
+				</boolean>
+
+				<boolean name="fadeimage" default="true" en="Fade images" fr="Fondu des images">
+					<checkbox></checkbox>
+				</boolean>
+
+				<boolean name="forceloop" default="false" en="Force loop" fr="Forcer le bouclage">
+					<checkbox></checkbox>
+				</boolean>
+
+				<boolean name="playingreport" default="true" en="Send playing report" fr="Statistiques de jeu">
+					<checkbox></checkbox>
+				</boolean>
+
+				<clip-or-null name="clip" en="Default clip" fr="Clip par défaut" desc-en="Default clip is played when no clip is playable" desc-fr="Le clip par défaut sera joué si aucun clip n'est jouable">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+			</group>
+
+			<group name="logo" en="Logo parameters" fr="Paramètres du logo" desc-en="Available on players since version 3.5.15" desc-fr="Disponible sur les lecteurs à partir de la version 3.5.15">
+
+				<clip-or-null name="clip" en="Logo clip" fr="Clip du logo" type="IMG">
+					<clipbox></clipbox>
+				</clip-or-null>
+
+				<string name="top" default="10" en="Logo top position in pixel" fr="Position en hauteur en pixel"
+						desc-en="Value for this parameter is a number of pixel or a formula using W,H,+ and - (Width and Height of the screen)."
+						desc-fr="Le valeur pour ce paramètre est un nombre de pixel ou une formule utilisant W,H,+ et - (W étant la largeur de l'écran, H étant la hauteur de l'écran).">
+					<textbox/>
+				</string>
+
+				<string name="left" default="W-10-100" en="Logo left position in pixel" fr="Position à gauche en pixel"
+						desc-en="Value for this parameter is a number of pixel or a formula using W,H,+ and - (Width and Height of the screen)."
+						desc-fr="Le valeur pour ce paramètre est un nombre de pixel ou une formule utilisant W,H,+ et - (W étant la largeur de l'écran, H étant la hauteur de l'écran).">
+					<textbox/>
+				</string>
+
+				<string name="width" default="100" en="Logo width in pixel" fr="Largeur en pixel"
+						desc-en="Value for this parameter is a number of pixel or a formula using W,H,+ and - (Width and Height of the screen)."
+						desc-fr="Le valeur pour ce paramètre est un nombre de pixel ou une formule utilisant W,H,+ et - (W étant la largeur de l'écran, H étant la hauteur de l'écran).">
+					<textbox/>
+				</string>
+
+				<string name="height" default="100" en="Logo height in pixel" fr="Hauteur en pixel"
+						desc-en="Value for this parameter is a number of pixel or a formula using W,H,+ and - (Width and Height of the screen)."
+						desc-fr="Le valeur pour ce paramètre est un nombre de pixel ou une formule utilisant W,H,+ et - (W étant la largeur de l'écran, H étant la hauteur de l'écran).">
+					<textbox/>
+				</string>
+
+			</group>
+
+			<string name="dumb" default="">
+				<custombox name="$$$">
+
+					<js><![CDATA[
+						window.@@@.Hide( 'dumb' );
+					]]></js>
+
+					<js mode="view"><![CDATA[
+						var pattern = /(\d{4})(\d{2})(\d{2})000000/;
+						var now     = new Date();
+						var green   = '#00cc00';
+						var orange  = '#cc6600';
+						var red     = '#cc0000';
+
+						for ( var i = 1 ; i <= 40 ; i++ ) {
+
+							var qdf = ( window.@@@.IsInEditMode( [ 'clip' + i , 'datefrom' ] ) ) ?  window.@@@.GetAlternativeID( [ 'clip' + i , 'datefrom' ] ) : window.@@@.GetActiveID( [ 'clip' + i , 'datefrom' ] );
+							var date_from;
+							if ( qdf.length > 0 )
+							{
+								date_from = jQuery( '#' + qdf ).val();
+								if ( date_from.length === 14 )
+								{
+									date_from = date_from.replace( pattern , '$1-$2-$3' );
+									date_from = new Date( date_from + "T00:00:00" );
+								}
+							}
+
+							var qdt = ( window.@@@.IsInEditMode( [ 'clip' + i , 'datefrom' ] ) ) ?  window.@@@.GetAlternativeID( [ 'clip' + i , 'dateto' ] ) : window.@@@.GetActiveID( [ 'clip' + i , 'dateto' ] );
+							var date_to;
+							if ( qdt.length > 0 )
+							{
+								date_to = jQuery( '#' + qdt ).val();
+								if ( date_to.length === 14 )
+								{
+									date_to = date_to.replace( pattern , '$1-$2-$3' );
+									date_to = new Date( date_to + "T00:00:00" );
+								}
+							}
+
+							if ( ( typeof date_from === "object" ) && ( typeof date_to === "object" ) )
+							{
+								if ( ( now > date_from ) && ( now < date_to ) )
+								{
+									jQuery( "#" + qdf ).parent().css( "color" , green );
+									jQuery( "#" + qdt ).parent().css( "color" , green );
+								}
+								else if ( now >= date_to )
+								{
+									jQuery( "#" + qdf ).parent().css( "color" , red );
+									jQuery( "#" + qdt ).parent().css( "color" , red );
+								}
+								else if ( now <= date_from )
+								{
+									jQuery( "#" + qdf ).parent().css( "color" , orange );
+									jQuery( "#" + qdt ).parent().css( "color" , orange );
+								}
+							}
+							else if ( typeof date_from === "object" )
+							{
+								if ( now <= date_from )
+								{
+									jQuery( "#" + qdf ).parent().css( "color" , orange );
+								}
+								else
+								{
+									jQuery( "#" + qdf ).parent().css( "color" , green );
+								}
+							}
+							else if ( typeof date_to === "object" )
+							{
+								if ( now >= date_to )
+								{
+									jQuery( "#" + qdt ).parent().css( "color" , red );
+								}
+								else
+								{
+									jQuery( "#" + qdt ).parent().css( "color" , green );
+								}
+							}
+						}
+					]]></js>
+
+				</custombox>
+			</string>
+
+		</custom-fields>
+
+	</vsapp>

@@ -1,0 +1,198 @@
+<?php
+VSOS::Init();
+
+$require_version = '3.4.19';
+$whoami          = VSOS::GetThisContentID();
+
+if ( VSOS::CompareAPIVersions( VSOS::GetAPIVersion() , $require_version ) == - 1 ) {
+	header( "Location: vsapp/error.php".
+		"?tit=" . urlencode( 'Error!' ) .
+		"&btn=" . urlencode( "Upgrade now" ) .
+		"&url=" . urlencode( "https://manager.videospot.com" ) .
+		"&msg=" . urlencode( 'VSOS version ' . $require_version . ' is required.<br/>This player currently runs ' . VSOS::GetAPIVersion() . '.<br/>It has to be upgraded in order to play this content !' )
+	);
+	die();
+}
+
+
+
+/**
+ * Tune code
+ * Call a first time to mark start point
+ * Call next to make a measure
+ *
+ * @param string $token      marker name
+ * @param string $onlyscript only for a PHP script
+ * @param string $txt        additional marker
+ * @param bool   $reinit     timer has to be reinitialized when called a second time
+ */
+function tune( $token , $onlyscript = '' , $txt = '' , $reinit = false ) {
+	return;
+	if ( $onlyscript != '' )
+		if ( strpos( $_SERVER[ 'PHP_SELF' ] , $onlyscript ) === false )
+			return;
+	global $tune_array;
+	if ( ! is_array( $tune_array ) )
+		$tune_array = array();
+	if ( array_key_exists( $token , $tune_array ) ) {
+		$now      = microtime( true );
+		$duration = (int) ( ( $now - $tune_array[ $token ] ) * 1000 );
+		$tokentxt = ( $txt == '' ) ? $token : $token . ':' . $txt;
+		error_log( '[' . $tokentxt . '] ' . $duration . 'ms' );
+		if ( $reinit ) {
+			$tune_array[ $token ] = $now;
+		}
+	} else {
+		$tune_array[ $token ] = microtime( true );
+	}
+}
+
+
+/**
+ * Load default data from the vsapp.xml file
+ */
+function load_default_custom_data() {
+	$vsapp       = new SimpleXMLElement( file_get_contents( 'vsapp.xml' ) );
+	$app_version = $vsapp[ 'version' ];
+	foreach ( $vsapp->xpath( '//custom-fields/*' ) as $node ) {
+		if ( $node->getName() == 'group' ) {
+			$prefix = $node[ "name" ];
+			foreach ( $node as $nod ) {
+				$key = $prefix . '_' . $nod[ "name" ];
+				global $$key;
+				$$key = strval( $nod[ "default" ] );
+			}
+		} else {
+			$key = $node[ "name" ];
+			global $$key;
+			$$key = strval( $node[ "default" ] );
+		}
+	}
+}
+
+
+/**
+ * Load custom data of the content $whoami
+ *
+ * @param $whoami
+ *
+ * @return array|bool|mixed
+ */
+function load_custom_data( $whoami ) {
+	$cd = VSOS::GetContentCustomData( $whoami );
+	if ( isset( $cd[ 0 ] ) ) {
+		foreach ( $cd[ 0 ] as $k => $v ) {
+			if ( is_array( $v ) ) {
+				$prefix = $k;
+				foreach ( $v[ 0 ] as $l => $w ) {
+					$l = $prefix . '_' . $l;
+					global $$l;
+					$$l = $w;
+				}
+			} else {
+				global $$k;
+				$$k = $v;
+			}
+		}
+	}
+	return $cd;
+}
+
+
+/**
+ * Load free data of the current played content
+ * Only free data prefixed with $prefix_ will be loaded
+ *
+ * @param $prefix
+ */
+function load_content_freedata( $prefix ) {
+	if ( substr( $prefix , - 1 ) != '_' )
+		$prefix .= '_';
+	$l = strlen( $prefix );
+	foreach ( VSOS::GetContentFreeData() as $k => $v ) {
+		if ( substr( $k , 0 , $l ) == $prefix ) {
+			$name = substr( $k , $l );
+			global $$name;
+			$$name = $v;
+		}
+	}
+}
+
+
+/**
+ * @param $prefix
+ */
+function load_terminal_freedata( $prefix ) {
+	if ( substr( $prefix , - 1 ) != '_' )
+		$prefix .= '_';
+	$l = strlen( $prefix );
+	foreach ( VSOS::GetTerminalFreeData() as $k => $v ) {
+		if ( substr( $k , 0 , $l ) == $prefix ) {
+			$name = substr( $k , $l );
+			global $$name;
+			$$name = $v;
+		}
+	}
+}
+
+
+/**
+ * Return the duration in float seconds before next element
+ *
+ * @return float
+ */
+function get_duration_before_next_element() {
+	$played_elements = VSOS::GetPlayedContent( 1 );
+	if ( count( $played_elements ) == 2 ) {
+		foreach ( $played_elements as $next_time => $dumb ) {
+		}
+		$next_epoch  = mktime( substr( $next_time , 0 , 2 ) , substr( $next_time , 2 , 2 ) , substr( $next_time , 4 , 2 ) );
+		$next_epochm = substr( $next_time , 6 , 1 );
+
+		list( $mepoch , $epoch ) = explode( ' ' , microtime() );
+		$epoch  = (int) $epoch;
+		$epochm = (int) ( (float) $mepoch * 10 );
+
+		$start         = (float) ( $epoch . '.' . $epochm );
+		$stop          = (float) ( $next_epoch . '.' . $next_epochm );
+		$anim_duration = ( $stop - $start );
+
+		return $anim_duration;
+	} else {
+		$current_element  = VSOS::GetContentData();
+		$content_duration = (int) @$current_element[ 'length' ];
+		return $content_duration / 1000;
+	}
+}
+
+
+/**
+ * Get an array of terminal tags
+ *
+ * @return  array
+ */
+function get_terminal_tags()
+{
+	return explode( ',' , VSOS::getSettings('labelid') );
+}
+
+// Load default custom data
+load_default_custom_data();
+
+// Overwrite custom data
+$cd = load_custom_data( $whoami );
+
+// Debug
+$sync = '';
+if ( isset( $_GET[ 'debug' ] ) ) {
+	VSOSSync::SetDebug( true );
+	$sync = '?debug';
+}
+
+// Developer options
+$is_played_on_videospot = strpos( $_SERVER[ 'HTTP_USER_AGENT' ] , 'VideoSpot/' );
+$is_played_on_preview   = strpos( $_SERVER[ 'SERVER_NAME' ] , 'p.com' );
+$content_duration       = get_duration_before_next_element();
+if ( ( ( $is_played_on_preview === false ) && ( $is_played_on_videospot === false ) ) || ( $content_duration <= 0 ) ){
+	$content_duration = 7;
+}
