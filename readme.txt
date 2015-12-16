@@ -25,7 +25,7 @@ Don't hesitate to ask us new features or report bugs on [the plugin page](https:
 
 == Frequently asked questions ==
 
-= How can I try this plugin, I don't have a VideoSpot account
+**How can I try this plugin, I don't have a VideoSpot account**
 
 Just create a free VideoSpot account at <http://join.videospot.com> and you are on the right way!
 
