@@ -183,7 +183,7 @@ $dom -> loadHTML($originalPost);
 $imgs = $dom -> getElementsByTagName("img");
 $scripts = $dom -> getElementsByTagName("script");
 $links = $dom -> getElementsByTagName("link");
-foreach($imgs as $img){ // massage img
+foreach ($imgs as $img){ // massage img
 	$src = $img -> getAttribute('src');
 	if (!empty($src)) {
 		$srcTemp = trim_src($src);
@@ -196,7 +196,7 @@ foreach($imgs as $img){ // massage img
 		$img -> setAttribute('src', $src);
 	}
 }
-foreach($scripts as $script){
+foreach ($scripts as $script){
 	$src = $script -> getAttribute('src');
 	if (!empty($src)) { // massage js
 		$srcTemp = trim_src($src);
@@ -209,7 +209,7 @@ foreach($scripts as $script){
 		$script -> setAttribute('src', $src);
 	}
 }
-foreach($links as $link){
+foreach ($links as $link){
 	$src = $link -> getAttribute('href');
 	if (!empty($src)) { // massage css
 		$srcTemp = trim_src($src);
@@ -239,26 +239,21 @@ if (!is_dir($pathToFiles."/media")){
 $dom = new DOMDocument();
 $dom -> loadHTML($originalPost);
 $imgs = $dom -> getElementsByTagName("img");
-$mediaArray = array();
-$iii = 0;
 foreach ($imgs as $img){
-	$mediaArray[$iii] = $img -> getAttribute('src');
-	$iii++;
-}
-foreach ($mediaArray as $value) {
-	if (substr($value, 0, 4)!="http") {
-		if (substr($value, 0, 2)=="//") {
+	$src = $img -> getAttribute('src');
+	if (substr($src, 0, 4)!="http") {
+		if (substr($src, 0, 2)=="//") {
 			if (substr(get_site_url(), 0, 5)=="https") {
-				$value = "https:".$value;
+				$src = "https:".$src;
 			} else if (substr(get_site_url(), 0, 5)=="http:") {
-				$value = "http:".$value;
+				$src = "http:".$src;
 			}
 		} else {
-			$value = get_site_url().$value;
+			$src = get_site_url().$src;
 		}
 	}
-	$mediaContent = disguise_curl($value);
-	$mediaContentName = trim_src($value);
+	$mediaContent = disguise_curl($src);
+	$mediaContentName = trim_src($src);
 	if (!empty($mediaContent)) {
 		if (!file_put_contents($pathToFiles."/media/".$mediaContentName, $mediaContent)) {
 			echo "Could not save ".$pathToFiles."/media/".$mediaContentName;
