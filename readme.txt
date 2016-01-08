@@ -2,8 +2,8 @@
 Contributors: David, Potsky
 Tags: page, post, videospot, app, digital, signage
 Requires at least: 3.3
-Tested up to: 4.4
-Stable tag: 0.0.1
+Tested up to: 4.4.1
+Stable tag: 0.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,6 +43,10 @@ All futures requests are handled on [GitHub](https://github.com/potsky/WordPress
 2. Admin > The plugin configuration page
 
 == Changelog ==
+
+= 0.0.2 =
+- Enhancement [Add default duration #2](https://github.com/videospot/wordpress-app-publisher/issues/2)
+- Fix issue [Extract fails #4](https://github.com/videospot/wordpress-app-publisher/issues/4)
 
 = 0.0.1 =
 This is the first release

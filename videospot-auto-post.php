@@ -3,8 +3,8 @@
 Plugin Name: VideoSpot App Publisher
 Plugin URI: https://github.com/videospot/wordpress-app-publisher
 Description: Publish your Wordpress posts and pages to VideoSpot
-Version: 0.0.1
-Date: 2015-12-15
+Version: 0.0.2
+Date: 2016-01-07
 Author: TCPartners
 Author URI: http://www.tcpartners.fr
 Licence:
