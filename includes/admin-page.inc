@@ -48,9 +48,9 @@ $videospotUniverse = array (
 	array("name" => "VideoSpot universe name", "desc" => "VideoSpot universe name", "id" => "videospot_universename_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
 );
 $videospotOptions = array (
-	array("name" => "Duration (hours)", "desc" => "Duration of your clip (hours)", "id" => "videospot_durationhours_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
-	array("name" => "Duration (minutes)", "desc" => "Duration of your clip (minutes)", "id" => "videospot_durationminutes_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
-	array("name" => "Duration (seconds)", "desc" => "Duration of your clip (seconds)", "id" => "videospot_durationseconds_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
+	array("name" => "Duration (hours)", "desc" => "Duration of your clip (hours)", "id" => "videospot_durationhours_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
+	array("name" => "Duration (minutes)", "desc" => "Duration of your clip (minutes)", "id" => "videospot_durationminutes_".$currentUsrID, "type" => "text", "std" => "1",  "autocomplete" => "off"),
+	array("name" => "Duration (seconds)", "desc" => "Duration of your clip (seconds)", "id" => "videospot_durationseconds_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
 	array("name" => "Name", "desc" => "Clip name", "id" => "videospot_name_".$currentUsrID, "type" => "text", "std" => ""),
 );
 $videospotUniversalAccount = array (

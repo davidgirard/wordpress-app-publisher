@@ -133,10 +133,15 @@ function disguise_curl($url) {
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	$html = curl_exec($curl);
-	curl_close($curl);
-	return $html;
-}
+	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	if ($httpCode==404) {
+		$html='';
+	}
+	curl_close($curl); 
+	return $html; 
+} 
 
 // Trim src content to make it simple to save and display
 function trim_src($xyz) {
@@ -178,7 +183,7 @@ $dom -> loadHTML($originalPost);
 $imgs = $dom -> getElementsByTagName("img");
 $scripts = $dom -> getElementsByTagName("script");
 $links = $dom -> getElementsByTagName("link");
-foreach($imgs as $img){ // massage img
+foreach ($imgs as $img){ // massage img
 	$src = $img -> getAttribute('src');
 	if (!empty($src)) {
 		$srcTemp = trim_src($src);
@@ -191,7 +196,7 @@ foreach($imgs as $img){ // massage img
 		$img -> setAttribute('src', $src);
 	}
 }
-foreach($scripts as $script){
+foreach ($scripts as $script){
 	$src = $script -> getAttribute('src');
 	if (!empty($src)) { // massage js
 		$srcTemp = trim_src($src);
@@ -204,7 +209,7 @@ foreach($scripts as $script){
 		$script -> setAttribute('src', $src);
 	}
 }
-foreach($links as $link){
+foreach ($links as $link){
 	$src = $link -> getAttribute('href');
 	if (!empty($src)) { // massage css
 		$srcTemp = trim_src($src);
@@ -231,10 +236,24 @@ if (!is_dir($pathToFiles."/media")){
 		echo "Could not create ".$path."/media"." directory";
 	}
 }
-preg_match_all('/src="([^"]+)"/', $originalPost, $mediaArray, PREG_PATTERN_ORDER); // Catch img and js
-foreach ($mediaArray[1] as $value) {
-	$mediaContent = disguise_curl($value);
-	$mediaContentName = trim_src($value);
+$dom = new DOMDocument();
+$dom -> loadHTML($originalPost);
+$imgs = $dom -> getElementsByTagName("img");
+foreach ($imgs as $img){
+	$src = $img -> getAttribute('src');
+	if (substr($src, 0, 4)!="http") {
+		if (substr($src, 0, 2)=="//") {
+			if (substr(get_site_url(), 0, 5)=="https") {
+				$src = "https:".$src;
+			} else if (substr(get_site_url(), 0, 5)=="http:") {
+				$src = "http:".$src;
+			}
+		} else {
+			$src = get_site_url().$src;
+		}
+	}
+	$mediaContent = disguise_curl($src);
+	$mediaContentName = trim_src($src);
 	if (!empty($mediaContent)) {
 		if (!file_put_contents($pathToFiles."/media/".$mediaContentName, $mediaContent)) {
 			echo "Could not save ".$pathToFiles."/media/".$mediaContentName;
@@ -246,7 +265,7 @@ $dom -> loadHTML($originalPost);
 $links = $dom -> getElementsByTagName("link");
 foreach ($links as $link) {
 	if (strtolower($link->getAttribute('rel'))=="stylesheet") {
-		$actualHref = $link->getAttribute("href");
+		$actualHref = $link -> getAttribute("href");
 		$mediaContent = disguise_curl($actualHref);
 		$mediaContentName = trim_src($actualHref);
 		preg_match_all('/url([^)]+)/', $mediaContent, $urlArray, PREG_PATTERN_ORDER); // Catch sub url params within css, massage and save
@@ -291,9 +310,9 @@ $rootPathFiles = realpath($pathToFiles);
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPathFiles), RecursiveIteratorIterator::LEAVES_ONLY);
 foreach ($files as $name => $file) {
 	if (!$file->isDir()) {
-		$filePath = $file->getRealPath();
+		$filePath = $file -> getRealPath();
 		$relativePath = substr($filePath, strlen($rootPathFiles) + 1);
-		$zip->addFile($filePath, $relativePath);
+		$zip -> addFile($filePath, $relativePath);
 	}
 }
 
@@ -302,12 +321,12 @@ $rootPathEmbeds = realpath(plugin_dir_path(__FILE__)."../static/embeds/");
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPathEmbeds), RecursiveIteratorIterator::LEAVES_ONLY);
 foreach ($files as $name => $file) {
 	if (!$file->isDir()) {
-		$filePath = $file->getRealPath();
+		$filePath = $file -> getRealPath();
 		$relativePath = substr($filePath, strlen($rootPathEmbeds) + 1);
 		if (substr($relativePath, -3)=="xyz") {
 			$relativePath = substr($relativePath, 0, -3)."php";
 		}
-		$zip->addFile($filePath, $relativePath);
+		$zip -> addFile($filePath, $relativePath);
 	}
 }
 
