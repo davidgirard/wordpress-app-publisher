@@ -132,7 +132,9 @@ function disguise_curl($url) {
 	curl_setopt($curl, CURLOPT_AUTOREFERER, true);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	if (ini_get('open_basedir')!=true) {
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	}
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	$html = curl_exec($curl);
 	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
