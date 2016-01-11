@@ -132,7 +132,9 @@ function disguise_curl($url) {
 	curl_setopt($curl, CURLOPT_AUTOREFERER, true);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-	curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	if (ini_get('open_basedir')!=true) {
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	}
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	$html = curl_exec($curl);
 	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -341,13 +343,10 @@ $postResult = create_clips($vsServer, $sessionHash, $vsUniverse, $folderID, $fil
 if (empty($postResult)) {
 	echo "Post to VideoSpot failed, some of your settings might be incorrect, redirecting to the VideoSpot config page in the WordPress admin area. Alternatively, please contact your VideoSpot administrator.";
 	echo '<script language="javascript">';
-	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
+	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 10000);';
 	echo "</script>";
 } else {
-	echo "Post to VideoSpot succeeded, clip ID #".$postResult." created. Sending you back to the Edit Post page.";
-	echo '<script language="javascript">';
-	echo 'setTimeout(function(){location.href="'.admin_url().'post.php?post='.$postID.'&action=edit"}, 5000);';
-	echo "</script>";
+	echo "Post to VideoSpot succeeded, clip ID #".$postResult." created.";
 	// Increment post counter
 	$vsPostVersion = get_option('videospot_version_'.$postID);
 	if (empty($vsPostVersion)) {
