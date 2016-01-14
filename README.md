@@ -8,6 +8,10 @@ The plugin is hosted on the WordPress repository at this address: <https://wordp
 
 Don't hesitate to ask us new features or report bugs on [the plugin page](https://wordpress.org/support/plugin/videospot-app-publisher/) !
 
+## Installation, configuration and usage
+
+![](assets-wp-repo/howto.gif)
+
 ## Hint to publish on WP repo
 
 When using several SVN accounts on your computer, change the username when commiting :
