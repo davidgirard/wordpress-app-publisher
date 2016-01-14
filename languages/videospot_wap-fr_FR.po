@@ -1,0 +1,38 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VideoSpot Wordpress App Publisher\n"
+"POT-Creation-Date: 2016-01-14 14:08+0100\n"
+"PO-Revision-Date: 2016-01-14 14:12+0100\n"
+"Last-Translator: Potsky <potsky@me.com>\n"
+"Language-Team: TCPartners <dev@tcpartners.fr>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7\n"
+"X-Poedit-KeywordsList: gettext;gettext_noop;_x;_e;__;esc_attr__;esc_attr_e;"
+"esc_html__;esc_html_e;_ex;esc_attr_x;esc_html_x;_n;_nx;_n_noop;_nx_noop\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/remote-post.inc.php:25
+msgid "Invalid or missing post ID, aborting"
+msgstr "Erreur : l'identifiant de la page manque, rechargez la page"
+
+#: includes/remote-post.inc.php:32
+msgid "Invalid or missing session token, aborting"
+msgstr "Erreur : le token de sécurité a expiré, rechargez la page"
+
+#: includes/remote-post.inc.php:39
+msgid "Invalid or missing user ID, aborting"
+msgstr "Erreur : l'identifiant de l'utilisateur manque, rechargez la page"
+
+#: videospot-auto-post.php:99
+msgid "Note:"
+msgstr "Remarques :"
+
+#: videospot-auto-post.php:99
+msgid "Publish/update your post in WordPress before publishing to VideoSpot"
+msgstr "Publier/mettez à jour votre page avant de publier sur VideoSpot"
