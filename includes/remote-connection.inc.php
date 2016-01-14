@@ -15,6 +15,11 @@
 	You should have received a copy of the GNU General Public License
 	along with VideoSpot App Publisher.  If not, see <http://www.gnu.org/licenses/>.
 */
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+	status_header( 404 );
+	exit;
+}
+
 
 // Function to instantiate videospot session
 function session_videospot($servicesServer, $videospotUsr, $videospotPasswd) {

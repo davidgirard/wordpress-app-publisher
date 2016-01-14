@@ -3,7 +3,7 @@ Contributors: David, Potsky
 Tags: page, post, videospot, app, digital, signage
 Requires at least: 3.3
 Tested up to: 4.4.1
-Stable tag: 0.0.2
+Stable tag: 0.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,6 +43,11 @@ All futures requests are handled on [GitHub](https://github.com/potsky/WordPress
 2. Admin > The plugin configuration page
 
 == Changelog ==
+
+= 0.0.3 =
+- Fix: UTF-8 pages are now supported
+- Fix: PHP installs with open_basedir parameter are now supported [#8](https://github.com/videospot/wordpress-app-publisher/issues/8)
+- Enhancement: messages are improved and are displayed in the page
 
 = 0.0.2 =
 - Enhancement [Add default duration #2](https://github.com/videospot/wordpress-app-publisher/issues/2)

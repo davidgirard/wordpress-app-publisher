@@ -15,6 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with VideoSpot App Publisher.  If not, see <http://www.gnu.org/licenses/>.
 */
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+	status_header( 404 );
+	exit;
+}
 
 
 //////// Catch Post ID and validate session ////////
@@ -22,21 +26,21 @@
 // Get post ID, give up if none or non numerical
 $postID = $_POST["post_ID"];
 if ( empty($postID) || !ctype_digit($postID) ) {
-	echo "Invalid or missing post ID, aborting";
+	_e( "Invalid or missing post ID, aborting" );
 	exit();
 }
 
 // Validate session token
 $tokenToValidate = 'videospot_token_'.$postID;
 if ($_GET["vstok"]!=get_option($tokenToValidate)) {
-	echo "Invalid or missing session token, aborting";
+	_e( "Invalid or missing session token, aborting" );
 	exit();
 }
 
 // Get user ID
 $currentUsrID = $_GET["usrid"];
 if ( empty($currentUsrID) || !ctype_digit($currentUsrID) ) {
-	echo "Invalid or missing user ID, aborting";
+	_e( "Invalid or missing user ID, aborting" );
 	exit();
 }
 
@@ -105,7 +109,7 @@ if (empty($vsName)) {
 
 //////// Connection functions ////////
 
-include(plugin_dir_path(__FILE__).'remote-connection.inc');
+include(plugin_dir_path(__FILE__).'remote-connection.inc.php');
 
 
 //////// Functions ////////
@@ -132,18 +136,76 @@ function disguise_curl($url) {
 	curl_setopt($curl, CURLOPT_AUTOREFERER, true);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-	if (ini_get('open_basedir')!=true) {
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-	}
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-	$html = curl_exec($curl);
-	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-	if ($httpCode==404) {
-		$html='';
+
+	$html = psk_curl_exec_follow( $curl );
+
+	if ( $html === false )
+	{
+		$html = '';
 	}
-	curl_close($curl); 
-	return $html; 
-} 
+	else if ( (int)curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400 )
+	{
+		$html = '';
+	}
+
+	curl_close($curl);
+
+	return $html;
+}
+
+
+/**
+ * Implementation of curl_exec which follows redirections.
+ *
+ * @param resource $ch          a curl resource
+ * @param int      $maxredirect the maximum HTTP redirects before aborting
+ *
+ * @return boolean false if an error occurs
+ * @return string  downloaded data
+ */
+function psk_curl_exec_follow($ch , &$maxredirect = null)
+{
+    $mr = $maxredirect === null ? 5 : intval( $maxredirect );
+    curl_setopt( $ch , CURLOPT_FOLLOWLOCATION , false );
+    if ($mr > 0) {
+        $newurl = curl_getinfo( $ch , CURLINFO_EFFECTIVE_URL );
+
+        $rch = curl_copy_handle( $ch );
+        curl_setopt( $rch , CURLOPT_HEADER , true );
+        curl_setopt( $rch , CURLOPT_NOBODY , true );
+        curl_setopt( $rch , CURLOPT_FORBID_REUSE , false );
+        curl_setopt( $rch , CURLOPT_RETURNTRANSFER , true );
+        do {
+            curl_setopt( $rch , CURLOPT_URL , $newurl );
+            $header = curl_exec( $rch );
+            if ( curl_errno( $rch ) ) {
+                $code = 0;
+            } else {
+                $code = curl_getinfo( $rch , CURLINFO_HTTP_CODE );
+                if ($code == 301 || $code == 302) {
+                    preg_match( '/Location:(.*?)\n/' , $header , $matches );
+                    $newurl = trim( array_pop( $matches ) );
+                } else {
+                    $code = 0;
+                }
+            }
+        } while ( $code && --$mr );
+        curl_close( $rch );
+        if (! $mr) {
+            if ($maxredirect === null) {
+                //trigger_error('Too many redirects. When following redirects, libcurl hit the maximum amount.', E_USER_WARNING);
+            } else {
+                $maxredirect = 0;
+            }
+
+            return false;
+        }
+        curl_setopt( $ch , CURLOPT_URL , $newurl );
+    }
+
+    return curl_exec( $ch );
+}
 
 // Trim src content to make it simple to save and display
 function trim_src($xyz) {
@@ -181,7 +243,19 @@ if (!is_dir($pathToFiles)){
 // Get html, massage and save
 $originalPost = disguise_curl(get_site_url()."?p=".$postID);
 $dom = new DOMDocument();
-$dom -> loadHTML($originalPost);
+
+// loadHTML does not correctly load UTF-8 chars
+// I have tried all tricks from this SO page but only this one works
+// http://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly
+if ( strpos( $originalPost , 'UTF-8' ) === false )
+{
+	$dom -> loadHTML( $originalPost );
+}
+else
+{
+	$dom -> loadHTML( mb_convert_encoding( $originalPost , 'HTML-ENTITIES' , 'UTF-8' ) );
+}
+
 $imgs = $dom -> getElementsByTagName("img");
 $scripts = $dom -> getElementsByTagName("script");
 $links = $dom -> getElementsByTagName("link");
@@ -224,6 +298,7 @@ foreach ($links as $link){
 		$link -> setAttribute('href', $src);
 	}
 }
+
 $massagedPost = $dom -> saveHTML();
 $massagedPost = file_get_contents(plugin_dir_path(__FILE__)."../static/index/index.xyz").$massagedPost;
 $stringToInject = "<?php echo \$js; ?>";

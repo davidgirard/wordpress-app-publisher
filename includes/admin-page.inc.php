@@ -15,6 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with VideoSpot App Publisher.  If not, see <http://www.gnu.org/licenses/>.
 */
+if ( ( realpath( __FILE__ ) === realpath( $_SERVER[ "SCRIPT_FILENAME" ] ) ) || ( ! defined( 'ABSPATH' ) ) ) {
+	status_header( 404 );
+	exit;
+}
 
 
 ///////// Check if universal account first ////////
@@ -59,7 +63,7 @@ $videospotUniversalAccount = array (
 
 //////// Connection functions ////////
 
-include(plugin_dir_path(__FILE__).'remote-connection.inc');
+include(plugin_dir_path(__FILE__).'remote-connection.inc.php');
 
 //////// Updates notification ////////
 

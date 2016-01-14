@@ -3,8 +3,8 @@
 Plugin Name: VideoSpot App Publisher
 Plugin URI: https://github.com/videospot/wordpress-app-publisher
 Description: Publish your Wordpress posts and pages to VideoSpot
-Version: 0.0.2
-Date: 2016-01-07
+Version: 0.0.3
+Date: 2016-01-14
 Author: TCPartners
 Author URI: http://www.tcpartners.fr
 Licence:
@@ -27,6 +27,9 @@ Licence:
 // Declare globals
 global $videospotLogin, $videospotUniverse, $videospotOptions;
 
+// Load text domain
+load_plugin_textdomain( 'videospot_wap' , false , dirname( plugin_basename( PSK_S2MSFB_PLUGIN_FILE ) ) . '/languages/' );
+
 // Main function to push content to VideoSpot via WP
 function videospot_endpoint() {
 	add_rewrite_endpoint('videospot-post', EP_ROOT);
@@ -34,7 +37,7 @@ function videospot_endpoint() {
 add_action('init', 'videospot_endpoint');
 function videospot_parse_query($query) {
 	if (isset($query->query_vars['videospot-post'])) {
-		include(plugin_dir_path(__FILE__).'includes/remote-post.inc');
+		include(plugin_dir_path(__FILE__).'includes/remote-post.inc.php');
 		exit;
 	}
 }
@@ -42,7 +45,7 @@ add_action('parse_query','videospot_parse_query');
 
 // Display VideoSpot options page for admins
 function videospot_menu_page(){
-	include(plugin_dir_path(__FILE__).'includes/admin-page.inc');
+	include(plugin_dir_path(__FILE__).'includes/admin-page.inc.php');
 }
 
 // Register admin options page with WP
@@ -74,7 +77,7 @@ function videospot_button() {
 	$vsName = get_option("videospot_name_".$currentUsrID);
 	$buttonShow = '<script type="text/javascript">
 				jQuery(document).ready(function() {
-					jQuery("#post").submit(function(event) {  
+					jQuery("#post").submit(function(event) {
 						jQuery("#printArea").empty().append("<img src=\'/wp-admin/images/wpspin_light-2x.gif\' height=\'16\' width=\'16\' /> Sending data to VideoSpot, please wait");
 						event.preventDefault();
 						jQuery.ajax({
@@ -87,13 +90,13 @@ function videospot_button() {
 							}
 						});
 					});
-				});   
+				});
 			</script>';
 	if ( !empty($currentUsrID) && !empty($vsServer) && !empty($vsUsr) && !empty($vsPasswd) && !empty($vsUniverse) && !empty($vsName) && ( !empty($vsDurationHours) ||  !empty($vsDurationMinutes) ||  !empty($vsDurationSeconds) ) ) {
 		$buttonShow .= '<div id="major-publishing-actions" style="overflow:hidden">';
 		$buttonShow .= '<div id="publishing-action" style="text-align:center">';
 		$buttonShow .= '<input class="button-primary" value="Send to VideoSpot" name="publish" type="submit" method="post" formaction="'.get_site_url().'?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'">';
-		$buttonShow .= '<div id="printArea" style="margin-top:5px;"><strong>Note:</strong> Publish/update your post in WordPress before publishing to VideoSpot</div>';
+		$buttonShow .= '<div id="printArea" style="margin-top:5px;"><strong>' . __( 'Note:' ) . '</strong> '. __( 'Publish/update your post in WordPress before publishing to VideoSpot' ) . '</div>';
 		$buttonShow .= '</div>';
 		$buttonShow .= '</div>';
 		echo $buttonShow;
@@ -106,5 +109,3 @@ function videospot_button() {
 	}
 }
 add_action('post_submitbox_misc_actions', 'videospot_button');
-
-?>
