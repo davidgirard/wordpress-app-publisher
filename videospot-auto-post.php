@@ -28,7 +28,7 @@ Licence:
 global $videospotLogin, $videospotUniverse, $videospotOptions;
 
 // Load text domain
-load_plugin_textdomain( 'videospot_wap' , false , dirname( plugin_basename( PSK_S2MSFB_PLUGIN_FILE ) ) . '/languages/' );
+load_plugin_textdomain( 'videospot_wap' , false , plugin_dir_path(__FILE__) . 'languages/' );
 
 // Main function to push content to VideoSpot via WP
 function videospot_endpoint() {
