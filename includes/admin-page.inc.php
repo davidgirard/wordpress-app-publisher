@@ -38,6 +38,7 @@ if (!empty($vsUniversalAccount)) {
 ///////// Set variables ////////
 
 // $vsServer = get_option("videospot_server_".$currentUsrID);
+$vsServer = "services.videospot.com"; // hardcoded endpoint
 update_option("videospot_server_".$currentUsrID, "services.videospot.com"); // hardcoded endpoint
 $vsUsr = get_option("videospot_usr_".$currentUsrID);
 $vsPasswd = get_option("videospot_passwd_".$currentUsrID);
