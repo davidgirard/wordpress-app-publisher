@@ -61,7 +61,6 @@ function list_folders_videospot($servicesServer, $videospotHash, $videospotUni) 
 	$headers = array("Content-Type:multipart/form-data");
 	$options = array(
 		CURLOPT_URL            => $url,
-		CURLOPT_POST           => 1,
 		CURLOPT_HTTPHEADER     => $headers,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLINFO_HEADER_OUT => true
