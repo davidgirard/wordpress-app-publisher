@@ -83,7 +83,7 @@ function videospot_button() {
 						jQuery.ajax({
 							type     : "POST",
 							cache    : false,
-							url: "'.get_site_url().'?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'",
+							url: "'.get_site_url().'/?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'",
 							data     : jQuery(this).serializeArray(),
 							success  : function(data) {
 								jQuery("#printArea").empty().append(data);
@@ -95,7 +95,7 @@ function videospot_button() {
 	if ( !empty($currentUsrID) && !empty($vsServer) && !empty($vsUsr) && !empty($vsPasswd) && !empty($vsUniverse) && !empty($vsName) && ( !empty($vsDurationHours) ||  !empty($vsDurationMinutes) ||  !empty($vsDurationSeconds) ) ) {
 		$buttonShow .= '<div id="major-publishing-actions" style="overflow:hidden">';
 		$buttonShow .= '<div id="publishing-action" style="text-align:center">';
-		$buttonShow .= '<input class="button-primary" value="Send to VideoSpot" name="publish" type="submit" method="post" formaction="'.get_site_url().'?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'">';
+		$buttonShow .= '<input class="button-primary" value="Send to VideoSpot" name="publish" type="submit" method="post" formaction="'.get_site_url().'/?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'">';
 		$buttonShow .= '<div id="printArea" style="margin-top:5px;"><strong>' . __( 'Note:' ) . '</strong> '. __( 'Publish/update your post in WordPress before publishing to VideoSpot' ) . '</div>';
 		$buttonShow .= '</div>';
 		$buttonShow .= '</div>';
