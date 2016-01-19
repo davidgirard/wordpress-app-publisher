@@ -3,8 +3,8 @@
 Plugin Name: VideoSpot App Publisher
 Plugin URI: https://github.com/videospot/wordpress-app-publisher
 Description: Publish your Wordpress posts and pages to VideoSpot
-Version: 0.0.3
-Date: 2016-01-14
+Version: 0.0.4
+Date: 2016-01-19
 Author: TCPartners
 Author URI: http://www.tcpartners.fr
 Licence:
@@ -78,24 +78,27 @@ function videospot_button() {
 	$buttonShow = '<script type="text/javascript">
 				jQuery(document).ready(function() {
 					jQuery("#post").submit(function(event) {
-						jQuery("#printArea").empty().append("<img src=\'/wp-admin/images/wpspin_light-2x.gif\' height=\'16\' width=\'16\' /> Sending data to VideoSpot, please wait");
-						event.preventDefault();
-						jQuery.ajax({
-							type     : "POST",
-							cache    : false,
-							url: "'.get_site_url().'/?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'",
-							data     : jQuery(this).serializeArray(),
-							success  : function(data) {
-								jQuery("#printArea").empty().append(data);
-							}
-						});
+						if (document.pressed=="Send to VideoSpot") {
+							jQuery("#printArea").empty().append("<img src=\'/wp-admin/images/wpspin_light-2x.gif\' height=\'16\' width=\'16\' /> Sending data to VideoSpot, please wait");
+							event.preventDefault();
+							jQuery.ajax({
+								type     : "POST",
+								cache    : false,
+								url: "'.get_site_url().'/?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'",
+								data     : jQuery(this).serializeArray(),
+								success  : function(data) {
+									jQuery("#printArea").empty().append(data);
+								}
+							});
+							document.pressed="done";
+						}
 					});
 				});
 			</script>';
 	if ( !empty($currentUsrID) && !empty($vsServer) && !empty($vsUsr) && !empty($vsPasswd) && !empty($vsUniverse) && !empty($vsName) && ( !empty($vsDurationHours) ||  !empty($vsDurationMinutes) ||  !empty($vsDurationSeconds) ) ) {
 		$buttonShow .= '<div id="major-publishing-actions" style="overflow:hidden">';
 		$buttonShow .= '<div id="publishing-action" style="text-align:center">';
-		$buttonShow .= '<input class="button-primary" value="Send to VideoSpot" name="publish" type="submit" method="post" formaction="'.get_site_url().'/?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'">';
+		$buttonShow .= '<input class="button-primary" value="Send to VideoSpot" name="publish" type="submit" method="post" onclick="document.pressed=this.value" formaction="'.get_site_url().'?videospot-post&vstok='.$sessionTok.'&usrid='.$currentUsrID.'">';
 		$buttonShow .= '<div id="printArea" style="margin-top:5px;"><strong>' . __( 'Note:' ) . '</strong> '. __( 'Publish/update your post in WordPress before publishing to VideoSpot' ) . '</div>';
 		$buttonShow .= '</div>';
 		$buttonShow .= '</div>';
