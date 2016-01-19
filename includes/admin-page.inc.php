@@ -37,13 +37,14 @@ if (!empty($vsUniversalAccount)) {
 
 ///////// Set variables ////////
 
-$vsServer = get_option("videospot_server_".$currentUsrID);
+// $vsServer = get_option("videospot_server_".$currentUsrID);
+update_option("videospot_server_".$currentUsrID, "services.videospot.com"); // hardcoded endpoint
 $vsUsr = get_option("videospot_usr_".$currentUsrID);
 $vsPasswd = get_option("videospot_passwd_".$currentUsrID);
 $vsUniverse = get_option("videospot_universe_".$currentUsrID);
 $vsUniverseName = get_option("videospot_universename_".$currentUsrID);
 $videospotLogin = array (
-	array("name" => "VideoSpot server", "desc" => "Enter your VideoSpot server (default server <em><strong>services.videospot.com</strong></em>)", "id" => "videospot_server_".$currentUsrID, "type" => "text", "std" => "services.videospot.com",  "autocomplete" => "off"),
+	// array("name" => "VideoSpot server", "desc" => "Enter your VideoSpot server (default server <em><strong>services.videospot.com</strong></em>)", "id" => "videospot_server_".$currentUsrID, "type" => "text", "std" => "services.videospot.com",  "autocomplete" => "off"),
 	array("name" => "VideoSpot login", "desc" => "Enter your VideoSpot login", "id" => "videospot_usr_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
 	array("name" => "VideoSpot password", "desc" => "Enter your VideoSpot password", "id" => "videospot_passwd_".$currentUsrID, "type" => "password", "std" => "",  "autocomplete" => "off"),
 );
