@@ -235,6 +235,8 @@ if ($numUsrUniverse==0) {
 	exit();
 } elseif ($numUsrUniverse==1) {
 	$usrUniverse = $allUniverses[0];
+	update_option('videospot_universe_'.$currentUsrID, $usrUniverse);
+	update_option('videospot_universename_'.$currentUsrID, $allUniversesNames[0]);
 	echo "You are currently using your default VideoSpot universe: <em><strong>".$allUniversesNames[0]."</strong></em><br />";
 } elseif ($numUsrUniverse>1) {
 	echo '<form id="universe" style="display:none;" method="post">';
