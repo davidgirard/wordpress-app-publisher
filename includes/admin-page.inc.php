@@ -29,7 +29,7 @@ $vsUniversalAccount = get_option("videospot_universalaccount");
 $vsUniversalAccountName = get_user_by('ID', $vsUniversalAccount)->display_name;
 if (!empty($vsUniversalAccount)) {
 	if ($vsUniversalAccount!=$currentUsrID) {
-		echo ("<h1>VideoSpot options disabled for ".$currentUsrName."</h1>The user ".$vsUniversalAccountName." declared his/her VideoSpot account universal for this blog, all wordpress users are using this account. To change this setting, please contact ".$vsUniversalAccountName."</h2>");
+		echo ("<h1>".__("VideoSpot options disabled for").$currentUsrName."</h1>".__("The user ").$vsUniversalAccountName.__("declared his/her VideoSpot account universal for this blog, all wordpress users are using this account. To change this setting, please contact ").$vsUniversalAccountName."</h2>");
 		exit();
 	}
 }
@@ -46,21 +46,21 @@ $vsUniverse = get_option("videospot_universe_".$currentUsrID);
 $vsUniverseName = get_option("videospot_universename_".$currentUsrID);
 $videospotLogin = array (
 	// array("name" => "VideoSpot server", "desc" => "Enter your VideoSpot server (default server <em><strong>services.videospot.com</strong></em>)", "id" => "videospot_server_".$currentUsrID, "type" => "text", "std" => "services.videospot.com",  "autocomplete" => "off"),
-	array("name" => "VideoSpot login", "desc" => "Enter your VideoSpot login", "id" => "videospot_usr_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
-	array("name" => "VideoSpot password", "desc" => "Enter your VideoSpot password", "id" => "videospot_passwd_".$currentUsrID, "type" => "password", "std" => "",  "autocomplete" => "off"),
+	array("name" => "VideoSpot login", "desc" => __("Enter your VideoSpot login"), "id" => "videospot_usr_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
+	array("name" => "VideoSpot password", "desc" => __("Enter your VideoSpot password"), "id" => "videospot_passwd_".$currentUsrID, "type" => "password", "std" => "",  "autocomplete" => "off"),
 );
 $videospotUniverse = array (
-	array("name" => "VideoSpot universe ID", "desc" => "VideoSpot universe ID", "id" => "videospot_universe_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
-	array("name" => "VideoSpot universe name", "desc" => "VideoSpot universe name", "id" => "videospot_universename_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
+	array("name" => "VideoSpot universe ID", "desc" => __("VideoSpot universe ID"), "id" => "videospot_universe_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
+	array("name" => "VideoSpot universe name", "desc" => __("VideoSpot universe name"), "id" => "videospot_universename_".$currentUsrID, "type" => "text", "std" => "",  "autocomplete" => "off"),
 );
 $videospotOptions = array (
-	array("name" => "Duration (hours)", "desc" => "Duration of your clip (hours)", "id" => "videospot_durationhours_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
-	array("name" => "Duration (minutes)", "desc" => "Duration of your clip (minutes)", "id" => "videospot_durationminutes_".$currentUsrID, "type" => "text", "std" => "1",  "autocomplete" => "off"),
-	array("name" => "Duration (seconds)", "desc" => "Duration of your clip (seconds)", "id" => "videospot_durationseconds_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
-	array("name" => "Name", "desc" => "Clip name", "id" => "videospot_name_".$currentUsrID, "type" => "text", "std" => ""),
+	array("name" => "Duration (hours)", "desc" => __("Duration of your clip (hours)"), "id" => "videospot_durationhours_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
+	array("name" => "Duration (minutes)", "desc" => __("Duration of your clip (minutes)"), "id" => "videospot_durationminutes_".$currentUsrID, "type" => "text", "std" => "1",  "autocomplete" => "off"),
+	array("name" => "Duration (seconds)", "desc" => __("Duration of your clip (seconds)"), "id" => "videospot_durationseconds_".$currentUsrID, "type" => "text", "std" => "0",  "autocomplete" => "off"),
+	array("name" => "Name", "desc" => __("Clip name"), "id" => "videospot_name_".$currentUsrID, "type" => "text", "std" => ""),
 );
 $videospotUniversalAccount = array (
-	array("name" => "Universal", "desc" => "Universal account", "id" => "videospot_universalaccount", "type" => "text", "std" => "",  "autocomplete" => "off"),
+	array("name" => "Universal", "desc" => __("Universal account"), "id" => "videospot_universalaccount", "type" => "text", "std" => "",  "autocomplete" => "off"),
 );
 
 //////// Connection functions ////////
@@ -95,8 +95,8 @@ if ('save_login'==$_REQUEST['action']) {
 	echo "setTimeout(function(){window.location.reload()}, 1000);";
 	echo "</script>";
 }
-if ( $message=='login saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Login settings saved, please wait for the page to reload</strong></p></div>';
-if ( $message=='login reset' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Login settings reset, please wait for the page to reload</strong></p></div>';
+if ( $message=='login saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Login settings saved, please wait for the page to reload').'</strong></p></div>';
+if ( $message=='login reset' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Login settings reset, please wait for the page to reload').'</strong></p></div>';
 
 // Universe options
 $message = '';
@@ -116,7 +116,7 @@ if ('save_universe'==$_REQUEST['action']) {
 	echo "setTimeout(function(){window.location.reload()}, 1000);";
 	echo "</script>";
 }
-if ( $message=='universe saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Universe settings saved, please wait for the page to reload</strong></p></div>';
+if ( $message=='universe saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Universe settings saved, please wait for the page to reload').'</strong></p></div>';
 
 
 // Clip options
@@ -138,8 +138,8 @@ if ('save'==$_REQUEST['action']) {
 	}
 	$message='reset';
 }
-if ( $message=='saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Clip settings saved</strong></p></div>';
-if ( $message=='reset' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Clip settings reset</strong></p></div>';
+if ( $message=='saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Clip settings saved').'</strong></p></div>';
+if ( $message=='reset' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Clip settings reset').'</strong></p></div>';
 
 // Universal account
 if ('save_universal'==$_REQUEST['action']) {
@@ -158,15 +158,17 @@ if ('save_universal'==$_REQUEST['action']) {
 	echo "setTimeout(function(){window.location.reload()}, 1000);";
 	echo "</script>";
 }
-if ( $message=='universal account saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>Universal account settings saved, please wait for the page to reload</strong></p></div>';
+if ( $message=='universal account saved' ) echo '<div class="updated settings-error" id="setting-error-settings_updated"> <p>'.__('Universal account settings saved, please wait for the page to reload').'</strong></p></div>';
 
 //////// Login portion of the admin page ////////
 
 ?>
 <div class="wrap options_wrap">
 	<div id="icon-options-general"></div>
-	<h1>VideoSpot Configuration</h1>
-	<h2>Login Info</h2>
+<?php
+echo "<h1>".__("VideoSpot Configuration")."</h1>";
+echo "<h2>".__("Login Info")."</h2>";
+?>
 	<div class="content_options">
 		<form method="post" autocomplete="off">
 			<input name="blockautocomplete" style="display: none;" type="password" />
@@ -189,7 +191,7 @@ if ( $message=='universal account saved' ) echo '<div class="updated settings-er
 		</form>
 		<form method="post">
 			<p style="padding: 0px !important; margin: 20px 0px 30px !important;" class="submit">
-				<input name="reset" type="submit" class="button-secondary" value="Reset login options" />
+				<input name="reset" type="submit" class="button-secondary" value=__("Reset login options") />
 				<input type="hidden" name="action" value="reset_login" />
 			</p>
 		</form>
@@ -210,16 +212,14 @@ $sessionArray = session_videospot($vsServer, $vsUsr, $vsPasswd);
 $sessionHash = $sessionArray['Hash'];
 
 if (empty($sessionHash)) {
-	echo "<h4>Error: could not establish session with server, please check your login and password information</h4>";
+	echo __("<h4>Error: could not establish session with server, please check your login and password information</h4>");
 	exit();
 }
 
 
 //////// Deal with universe(s) ////////
 
-?>
-	<h2>VideoSpot Universe</h2>
-<?php
+echo "<h2>".__("VideoSpot Universe")."</h2>";
 
 // Pick universe
 $allUniverses = $sessionArray['Universes'];
@@ -233,13 +233,13 @@ if ( ($numUsrUniverse==1) && empty($allUniverses[0]) ) {
 	$numUsrUniverse = 0; // Count array will always return 1 even if empty, fixing
 }
 if ($numUsrUniverse==0) {
-	echo "No universes available for your account, please contact your VideoSpot administrator";
+	echo __("No universes available for your account, please contact your VideoSpot administrator");
 	exit();
 } elseif ($numUsrUniverse==1) {
 	$usrUniverse = $allUniverses[0];
 	update_option('videospot_universe_'.$currentUsrID, $usrUniverse);
 	update_option('videospot_universename_'.$currentUsrID, $allUniversesNames[0]);
-	echo "You are currently using your default VideoSpot universe: <em><strong>".$allUniversesNames[0]."</strong></em><br />";
+	echo __("You are currently using your default VideoSpot universe: ")."<em><strong>".$allUniversesNames[0]."</strong></em><br />";
 } elseif ($numUsrUniverse>1) {
 	echo '<form id="universe" style="display:none;" method="post">';
 	echo '﻿﻿<input type="hidden" id="videospot_universe" name="videospot_universe_'.$currentUsrID.'" value="" autocomplete="off" />';
@@ -256,12 +256,12 @@ if ($numUsrUniverse==0) {
 	echo "}";
 	echo "</script>";
 	if (empty($vsUniverse)) {
-		echo "You are registered in multiple VideoSpot universes, please choose your working universe below<br />";
+		echo __("You are registered in multiple VideoSpot universes, please choose your working universe below")."<br />";
 	} else {
-		echo "You are currently using the VideoSpot universe <em><strong>".$vsUniverseName."</strong></em>, you can change your working universe below<br />";
+		echo __("You are currently using the VideoSpot universe ")."<em><strong>".$vsUniverseName."</strong></em>".__(", you can change your working universe below")."<br />";
 	}
 	echo '<select autocomplete="off" name="universe" size="1" onchange="linkToUni(this.options[this.selectedIndex].value);">';
-	echo '<option style="font-weight: bold;" value="">Universe...</option>';
+	echo '<option style="font-weight: bold;" value="">'.__('Universe...').'</option>';
 	foreach ($allUniverses as $universe) {
 		echo '<option value="'.$universe.','.$allUniversesNames[$i].'"';
 			if ($universe==$vsUniverse) {
@@ -282,9 +282,7 @@ if ($numUsrUniverse==0) {
 
 //////// Deal with folders ////////
 
-?>
-	<h2>VideoSpot Folder</h2>
-<?php
+echo "<h2>".__("VideoSpot Folder")."</h2>";
 
 // Pick or create folder
 $folderList = list_folders_videospot($vsServer, $sessionHash, $usrUniverse);
@@ -295,14 +293,14 @@ $folderName = "WordPress ".utf8_encode(get_bloginfo('name'));
 if ( empty($folderList) || (strpos($folderList, 'FullPath="'.$folderName.'"')===false) ) {
 	$newFolder = create_folder_videospot($vsServer, $sessionHash, $usrUniverse);
 	if (strpos($newFolder, 'FullPath="'.$folderName.'"')!==false) {
-		echo "Folder <em><strong>".$folderName."</strong></em> successfully created<br />";
+		echo __("Folder ")."<em><strong>".$folderName."</strong></em> ".__("successfully created")."<br />";
 	} else {
-		echo "Could not create <em><strong>".$folderName."</strong></em>, please contact your VideoSpot administrator";
+		echo __("Could not create ")."<em><strong>".$folderName."</strong></em>, ".__("please contact your VideoSpot administrator");
 		exit();
 	}
 	$folderList = $newFolder ;
 }
-echo "Using VideoSpot folder <em><strong>".$folderName;
+echo __("Using VideoSpot folder ")."<em><strong>".$folderName;
 $arrayFolders = explode("<", $folderList);
 $folderID="";
 foreach ($arrayFolders as $folder) {
@@ -311,7 +309,7 @@ foreach ($arrayFolders as $folder) {
 		$folderID = substr($folderID, 0, strpos($folderID, '"'));
 	}
 }
-echo " (Folder ID ".$folderID.")</strong></em>";
+echo " (".__("Folder ID ").$folderID.")</strong></em>";
 $optionName = 'videospot_folder';
 if (!add_option($optionName, $folderID)) {
 	update_option($optionName, $folderID);
@@ -319,8 +317,9 @@ if (!add_option($optionName, $folderID)) {
 
 
 //////// More admin page stuff ////////
+
+echo "<h2>".__("Clip Options")."</h2>";
 ?>
-	<h2>Clip Options</h2>
 	<div class="content_options">
 		<form method="post" autocomplete="off">
 			<input name="blockautocomplete" style="display: none;" type="password" />
@@ -352,8 +351,10 @@ if (!add_option($optionName, $folderID)) {
 
 
 //////// Universal account ////////
+
+echo "<h2>".__("Universal Account")."</h2>";
+
 ?>
-	<h2>Universal Account</h2>
 	<div class="content_options">
 		<form method="post" autocomplete="off">
 			<input autocomplete="off" type="checkbox" name="videospot_universalaccount" value="<?php echo $currentUsrID; ?>" <?php if ($vsUniversalAccount==$currentUsrID) echo 'checked="checked"' ?> /> This setting will make your VideoSpot account universal and will disable all the other VideoSpot accounts setup on this platform
