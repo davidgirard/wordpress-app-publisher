@@ -105,7 +105,7 @@ function videospot_button() {
 		echo $buttonShow;
 	} else {
 		$buttonShow .= '<div id="major-publishing-actions" style="overflow:hidden">';
-		$buttonShow .= '<div id="publishing-action" style="text-align:left"><em><strong>Warning:</strong></em> Please configure your VideoSpot parameters <a href="'.admin_url().'?page=videospotpage">here</a> to be able to post to VideoSpot';
+		$buttonShow .= '<div id="publishing-action" style="text-align:left"><em><strong>' . __( 'Warning:' ) . '</strong></em> '. __( 'Please configure your VideoSpot parameters ' ) . '<a href="' . admin_url(). '?page=videospotpage">'. __( 'here ' ) . '</a>'. __( ' to be able to post to VideoSpot' );
 		$buttonShow .= '</div>';
 		$buttonShow .= '</div>';
 		echo $buttonShow;
