@@ -55,7 +55,7 @@ $vsUniverseName = get_option("videospot_universename_".$currentUsrID);
 
 $vsServer = get_option("videospot_server_".$currentUsrID);
 if (empty($vsServer)) {
-	echo "Missing or incorrect VideoSpot API server, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect VideoSpot API server, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -63,7 +63,7 @@ if (empty($vsServer)) {
 }
 $vsUsr = get_option("videospot_usr_".$currentUsrID);
 if (empty($vsUsr)) {
-	echo "Missing or incorrect VideoSpot login, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect VideoSpot login, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -71,7 +71,7 @@ if (empty($vsUsr)) {
 }
 $vsPasswd = get_option("videospot_passwd_".$currentUsrID);
 if (empty($vsPasswd)) {
-	echo "Missing or incorrect VideoSpot password, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect VideoSpot password, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -79,7 +79,7 @@ if (empty($vsPasswd)) {
 }
 $vsUniverse = get_option("videospot_universe_".$currentUsrID);
 if (empty($vsUniverse)) {
-	echo "Missing or incorrect VideoSpot universe, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect VideoSpot universe, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -89,7 +89,7 @@ $durationHours = get_option("videospot_durationhours_".$currentUsrID);
 $durationMinutes = get_option("videospot_durationminutes_".$currentUsrID);
 $durationSeconds = get_option("videospot_durationseconds_".$currentUsrID);
 if ( (empty($durationHours)&&empty($durationMinutes)&&empty($durationSeconds)) || !ctype_digit($durationHours) || !ctype_digit($durationMinutes) || !ctype_digit($durationSeconds) ) {
-	echo "Missing or incorrect clip duration, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect clip duration, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -99,7 +99,7 @@ if ( (empty($durationHours)&&empty($durationMinutes)&&empty($durationSeconds)) |
 }
 $vsName = get_option("videospot_name_".$currentUsrID);
 if (empty($vsName)) {
-	echo "Missing or incorrect clip name, redirecting to the VideoSpot config page in the WordPress admin area";
+	echo __("Missing or incorrect clip name, redirecting to the VideoSpot config page in the WordPress admin area");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 5000);';
 	echo "</script>";
@@ -229,13 +229,13 @@ $pathToFiles = plugin_dir_path(__FILE__)."../temp/videospot-cache-".$randSeed;
 $tempDir = plugin_dir_path(__FILE__)."../temp";
 if (!is_dir($tempDir)){
 	if (!mkdir($tempDir)) {
-		echo "Could not create temp directory";
+		echo __("Could not create temp directory");
 		exit();
 	}
 }
 if (!is_dir($pathToFiles)){
 	if (!mkdir($pathToFiles)) {
-		echo "Could not create ".$pathToFiles." directory";
+		echo __("Could not create ").$pathToFiles.__(" directory");
 		exit();
 	}
 }
@@ -304,13 +304,13 @@ $massagedPost = file_get_contents(plugin_dir_path(__FILE__)."../static/index/ind
 $stringToInject = "<?php echo \$js; ?>";
 $massagedPost = preg_replace("/<body(.*?)>/is", "<body$1>".$stringToInject, $massagedPost);
 if (!file_put_contents($pathToFiles."/index.php", $massagedPost)) {
-	echo "Could not save ".$pathToFiles."/index.php";
+	echo __("Could not save ").$pathToFiles."/index.php";
 }
 
 // Get all pics, css and js, massage and save
 if (!is_dir($pathToFiles."/media")){
 	if (!mkdir($pathToFiles."/media")) {
-		echo "Could not create ".$path."/media"." directory";
+		echo __("Could not create ").$path."/media".__(" directory");
 	}
 }
 $dom = new DOMDocument();
@@ -333,7 +333,7 @@ foreach ($imgs as $img){
 	$mediaContentName = trim_src($src);
 	if (!empty($mediaContent)) {
 		if (!file_put_contents($pathToFiles."/media/".$mediaContentName, $mediaContent)) {
-			echo "Could not save ".$pathToFiles."/media/".$mediaContentName;
+			echo __("Could not save ").$pathToFiles."/media/".$mediaContentName;
 		}
 	}
 }
@@ -362,14 +362,14 @@ foreach ($links as $link) {
 			$urlContentName = trim_src($urlInCss);
 			if (!empty($urlContent)) {
 				if (!file_put_contents($pathToFiles."/media/".$urlContentName, $urlContent)) {
-					echo "Could not save ".$pathToFiles."/media/".$urlContentName;
+					echo __("Could not save ").$pathToFiles."/media/".$urlContentName;
 				}
 			}
 			$mediaContent = str_replace($urlInCssUntouched, $urlContentName, $mediaContent);
 		}
 		if (!empty($mediaContent)) { // Save actual css
 			if (!file_put_contents($pathToFiles."/media/".$mediaContentName, $mediaContent)) {
-				echo "Could not save ".$pathToFiles."/media/".$mediaContentName;
+				echo __("Could not save ").$pathToFiles."/media/".$mediaContentName;
 			}
 		}
 	}
@@ -416,12 +416,12 @@ $zip -> close();
 $filePath = realpath(plugin_dir_path(__FILE__)."../temp/post.zip");
 $postResult = create_clips($vsServer, $sessionHash, $vsUniverse, $folderID, $filePath, $vsDuration, $vsName, $postID);
 if (empty($postResult)) {
-	echo "Post to VideoSpot failed, some of your settings might be incorrect, redirecting to the VideoSpot config page in the WordPress admin area. Alternatively, please contact your VideoSpot administrator.";
+	echo __("Post to VideoSpot failed, some of your settings might be incorrect, redirecting to the VideoSpot config page in the WordPress admin area. Alternatively, please contact your VideoSpot administrator");
 	echo '<script language="javascript">';
 	echo 'setTimeout(function(){location.href="'.admin_url().'?page=videospotpage"}, 10000);';
 	echo "</script>";
 } else {
-	echo "Post to VideoSpot succeeded, clip ID #".$postResult." created.";
+	echo __("Post to VideoSpot succeeded, clip ID #").$postResult.__(" created");
 	// Increment post counter
 	$vsPostVersion = get_option('videospot_version_'.$postID);
 	if (empty($vsPostVersion)) {
